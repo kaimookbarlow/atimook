@@ -2,17 +2,15 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>For Atimaay 🤍</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For HIS_NAME 🤍</title>
 
 <style>
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  font-family: 'Playfair Display', serif;
+  font-family: 'Georgia', serif;
   background: linear-gradient(to bottom, #fff5f7, #ffe3ec);
   color: #5a3e4d;
   text-align: center;
@@ -25,9 +23,7 @@ section {
   margin: auto;
 }
 
-h1, h2 {
-  font-weight: 500;
-}
+h1, h2 { font-weight: 500; }
 
 button {
   padding: 12px 25px;
@@ -37,36 +33,13 @@ button {
   border-radius: 30px;
   cursor: pointer;
   font-size: 16px;
+  margin: 10px;
   transition: 0.3s;
 }
 
-button:hover {
-  background: #ffb3c6;
-}
+button:hover { background: #ffb3c6; }
 
-.hidden {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: 1s;
-}
-
-.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.card {
-  background: white;
-  margin: 15px auto;
-  padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 8px 20px rgba(255, 143, 171, 0.2);
-  width: 70%;
-  cursor: pointer;
-  transition: 0.6s;
-}
-
-#lockScreen {
+#introScreen {
   position: fixed;
   background: #fff5f7;
   height: 100vh;
@@ -78,11 +51,19 @@ button:hover {
   z-index: 10;
 }
 
-input {
-  padding: 10px;
+.music-player {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: white;
+  padding: 15px;
   border-radius: 20px;
-  border: 1px solid #ffb3c6;
-  margin-top: 10px;
+  box-shadow: 0 10px 25px rgba(255,182,193,0.4);
+  font-size: 14px;
+}
+
+.music-player input {
+  width: 100px;
 }
 
 .heart {
@@ -94,137 +75,124 @@ input {
 }
 
 @keyframes float {
-  0% {transform: translateY(0);}
-  100% {transform: translateY(110vh);}
-}
-
-#countdown {
-  font-size: 22px;
-  margin-top: 15px;
+  0% { transform: translateY(0); }
+  100% { transform: translateY(110vh); }
 }
 </style>
 </head>
 
 <body>
 
-<div id="lockScreen">
-<h2>Enter Our Secret 🤍</h2>
-<input id="passwordInput" type="password">
-<button onclick="checkPassword()">Unlock</button>
-<p id="errorMsg"></p>
+<!-- INTRO -->
+<div id="introScreen">
+  <h1>Will you be my Valentine? 🤍</h1>
+  <button onclick="enterSite()">Yes 🤍</button>
+  <button onclick="sayNo()">No</button>
+  <p id="noMessage"></p>
 </div>
 
+<!-- MUSIC PLAYER UI -->
+<div class="music-player">
+  <div id="nowPlaying">Now Playing: </div>
+  <input type="range" min="0" max="1" step="0.01" id="volumeSlider">
+</div>
+
+<audio id="bgMusic"></audio>
+
 <section>
-<h1>Hi HIS_NAME 🤍</h1>
-<p>This entire universe is just for you.</p>
-<button onclick="startExperience()">Begin</button>
+  <h1>Hi HIS_NAME 🤍</h1>
+  <p>This whole universe is for you.</p>
 </section>
 
-<section class="hidden">
-<h2>Our Story</h2>
-<p>✨ The day we met — write your memory</p>
-<p>✨ Our first date — write it beautifully</p>
-<p>✨ The moment I knew — this was different</p>
+<section>
+  <h2>Our Story</h2>
+  <p>Write your story here.</p>
 </section>
 
-<section class="hidden">
-<h2>10 Reasons I Adore You</h2>
-<div class="card" onclick="reveal(this)">Click me</div>
-<div class="card" onclick="reveal(this)">Click me</div>
-<div class="card" onclick="reveal(this)">Click me</div>
-<div class="card" onclick="reveal(this)">Click me</div>
-<div class="card" onclick="reveal(this)">Click me</div>
-<div class="card" onclick="reveal(this)">Click me</div>
-<div class="card" onclick="reveal(this)">Click me</div>
-<div class="card" onclick="reveal(this)">Click me</div>
-<div class="card" onclick="reveal(this)">Click me</div>
-<div class="card" onclick="reveal(this)">Click me</div>
+<section id="letterSection">
+  <h2>A Letter For You</h2>
+  <p>Write your emotional letter here.</p>
 </section>
-
-<section class="hidden">
-<h2>How Well Do You Know Us?</h2>
-<p>Where was our first date?</p>
-<input id="quizAnswer">
-<button onclick="checkQuiz()">Submit</button>
-<p id="quizResult"></p>
-</section>
-
-<section class="hidden">
-<h2>Countdown to Our Next Visit 🤍</h2>
-<div id="countdown"></div>
-</section>
-
-<section class="hidden">
-<h2>A Letter For You</h2>
-<p id="letterText" style="opacity:0; transition:2s;">
-Write your deep emotional letter here.
-Make it soft. Make it honest. Make it unforgettable.
-</p>
-<button onclick="revealLetter()">Read</button>
-</section>
-
-<section class="hidden">
-<h2>Our Future</h2>
-<p>✈️ Places we'll go</p>
-<p>🏡 Dreams we'll build</p>
-<p>🤍 Everything ahead of us</p>
-</section>
-
-<audio id="music" loop>
-<source src="song.mp3" type="audio/mpeg">
-</audio>
-<button onclick="toggleMusic()">Music 🤍</button>
 
 <script>
-function checkPassword() {
-  let input = document.getElementById("passwordInput").value;
-  if(input === "213214") {
-    document.getElementById("lockScreen").style.display = "none";
-  } else {
-    document.getElementById("errorMsg").innerText = "Wrong secret 🤍";
-  }
+const playlist = [
+  {src: "song1.mp3", name: "Song Title 1"},
+  {src: "song2.mp3", name: "Song Title 2"},
+  {src: "song3.mp3", name: "Song Title 3"}
+];
+
+let currentSong = 0;
+let musicStarted = false;
+const audio = document.getElementById("bgMusic");
+const nowPlaying = document.getElementById("nowPlaying");
+const volumeSlider = document.getElementById("volumeSlider");
+
+volumeSlider.value = 0.7;
+audio.volume = 0.7;
+
+volumeSlider.addEventListener("input", function() {
+  audio.volume = this.value;
+});
+
+function playSong(index) {
+  audio.src = playlist[index].src;
+  nowPlaying.innerText = "Now Playing: " + playlist[index].name;
+  audio.play();
 }
 
-function startExperience() {
-  document.querySelectorAll("section").forEach(sec => {
-    sec.classList.add("show");
+audio.addEventListener("ended", function() {
+  fadeOut(() => {
+    currentSong++;
+    if (currentSong >= playlist.length) {
+      currentSong = 0;
+    }
+    playSong(currentSong);
+    fadeIn();
   });
+});
+
+function fadeOut(callback) {
+  let fade = setInterval(() => {
+    if (audio.volume > 0.05) {
+      audio.volume -= 0.05;
+    } else {
+      clearInterval(fade);
+      callback();
+    }
+  }, 100);
 }
 
-function reveal(card) {
-  card.innerHTML = "Because you make my world softer and brighter.";
+function fadeIn() {
+  let fade = setInterval(() => {
+    if (audio.volume < volumeSlider.value) {
+      audio.volume = Math.min(audio.volume + 0.05, volumeSlider.value);
+    } else {
+      clearInterval(fade);
+    }
+  }, 100);
 }
 
-function checkQuiz() {
-  let answer = document.getElementById("quizAnswer").value;
-  let result = document.getElementById("quizResult");
-  if(answer.toLowerCase() === "PUT_REAL_ANSWER") {
-    result.innerHTML = "Correct 🤍";
-  } else {
-    result.innerHTML = "Try again 🤍";
+function enterSite() {
+  document.getElementById("introScreen").style.display = "none";
+  if (!musicStarted) {
+    playSong(currentSong);
+    musicStarted = true;
   }
 }
 
-function revealLetter() {
-  document.getElementById("letterText").style.opacity = "1";
+function sayNo() {
+  document.getElementById("noMessage").innerText = "Try again 🤍";
 }
 
-let targetDate = new Date("March 20, 2026 18:00:00").getTime();
-setInterval(function() {
-  let now = new Date().getTime();
-  let distance = targetDate - now;
-  let days = Math.floor(distance / (1000 * 60 * 60 * 24));
-  document.getElementById("countdown").innerHTML = days + " days 🤍";
-}, 1000);
-
-function toggleMusic() {
-  let music = document.getElementById("music");
-  if(music.paused) {
-    music.play();
+window.addEventListener("scroll", function() {
+  const letterSection = document.getElementById("letterSection");
+  const rect = letterSection.getBoundingClientRect();
+  if (rect.top < window.innerHeight && rect.bottom >= 0) {
+    audio.volume = 0.3;
   } else {
-    music.pause();
+    audio.volume = volumeSlider.value;
   }
-}
+});
 
 setInterval(() => {
   let heart = document.createElement("div");
