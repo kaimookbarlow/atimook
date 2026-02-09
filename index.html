@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>For HIS_NAME 🤍</title>
+<title>For Atimaay 🤍</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -17,13 +17,36 @@ body {
   overflow-x: hidden;
 }
 
-section {
-  padding: 100px 20px;
-  max-width: 900px;
-  margin: auto;
+/* MUSIC BAR */
+#musicBar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: #ff8fab;
+  color: white;
+  padding: 8px;
+  font-size: 14px;
+  z-index: 1000;
 }
 
-h1, h2 { font-weight: 500; }
+/* GATE */
+#gate {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.indent {
+  margin-left: 40px;
+}
+
+.buttonRow {
+  display: flex;
+  gap: 120px;
+  margin-top: 30px;
+}
 
 button {
   padding: 12px 25px;
@@ -38,46 +61,70 @@ button {
 
 button:hover { background: #ffb3c6; }
 
+section {
+  padding: 120px 20px;
+  max-width: 1000px;
+  margin: auto;
+}
+
 .hidden { opacity: 0; transform: translateY(40px); transition: 1s; }
 .show { opacity: 1; transform: translateY(0); }
 
-.card {
-  background: white;
-  margin: 15px auto;
-  padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 8px 20px rgba(255, 143, 171, 0.2);
-  width: 70%;
-  cursor: pointer;
-  transition: 0.6s;
+/* VISION BOARD */
+.vision img {
+  width: 400px;
+  margin: 20px;
+  border-radius: 25px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
 }
 
+/* QUIZ IMAGES */
 .quiz-image {
   max-width: 80%;
   border-radius: 20px;
   margin-top: 15px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  display: none;
 }
 
-.vision img {
-  width: 200px;
-  margin: 15px;
-  border-radius: 20px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+/* ENVELOPE */
+.envelope {
+  width: 300px;
+  height: 200px;
+  background: #ffb3c6;
+  margin: 40px auto;
+  position: relative;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: 0.8s;
 }
 
-#gate {
-  position: fixed;
-  background: #fff5f7;
-  height: 100vh;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 20;
+.flap {
+  width: 0;
+  height: 0;
+  border-left: 150px solid transparent;
+  border-right: 150px solid transparent;
+  border-bottom: 100px solid #ff8fab;
+  position: absolute;
+  top: -100px;
+  left: 0;
+  transition: 0.8s;
 }
 
+.letter {
+  opacity: 0;
+  padding: 20px;
+  transition: 1s;
+}
+
+.open .flap {
+  transform: rotateX(180deg);
+}
+
+.open .letter {
+  opacity: 1;
+}
+
+/* HEARTS */
 .heart {
   position: fixed;
   top: -10px;
@@ -90,65 +137,53 @@ button:hover { background: #ffb3c6; }
   0% {transform: translateY(0);}
   100% {transform: translateY(110vh);}
 }
-
-#countdown { font-size: 22px; margin-top: 15px; }
 </style>
 </head>
 
 <body>
 
-<!-- GATE -->
+<div id="musicBar">Not playing</div>
+<audio id="player"></audio>
+
+<!-- FIRST SCREEN -->
 <div id="gate">
-<h1>Will you be my Valentine? 🤍</h1>
-<button onclick="enterSite()">Yes</button>
-<button onclick="nope()">No</button>
+<h1>Dear Atimaay,</h1>
+<h2 class="indent">Will you be my Valentine?</h2>
+
+<div class="buttonRow">
+<button onclick="enter()">YES</button>
+<button onclick="nope()">NO</button>
+</div>
+
 <p id="noText"></p>
 </div>
 
-<audio id="musicPlayer"></audio>
-
-<section>
-<h1>Hi HIS_NAME 🤍</h1>
-<p>This entire universe is just for you.</p>
-</section>
+<!-- MAIN CONTENT -->
 
 <section class="hidden">
-<h2>Our Story</h2>
+<h2>Our Story 🤍</h2>
 <p>The day we met...</p>
 <p>Our first date...</p>
-<p>The moment I knew this was different.</p>
+<p>The moment I knew.</p>
 </section>
 
 <section class="hidden">
 <h2>10 Reasons I Adore You</h2>
-<div class="card" onclick="reveal(this)">Reason 1</div>
-<div class="card" onclick="reveal(this)">Reason 2</div>
-<div class="card" onclick="reveal(this)">Reason 3</div>
-<div class="card" onclick="reveal(this)">Reason 4</div>
-<div class="card" onclick="reveal(this)">Reason 5</div>
-<div class="card" onclick="reveal(this)">Reason 6</div>
-<div class="card" onclick="reveal(this)">Reason 7</div>
-<div class="card" onclick="reveal(this)">Reason 8</div>
-<div class="card" onclick="reveal(this)">Reason 9</div>
-<div class="card" onclick="reveal(this)">Reason 10</div>
+<div onclick="this.innerHTML='Because you make my world softer.'" style="cursor:pointer;">Click me 🤍</div>
+<div onclick="this.innerHTML='Because you choose me.'" style="cursor:pointer;">Click me 🤍</div>
+<div onclick="this.innerHTML='Because you listen.'" style="cursor:pointer;">Click me 🤍</div>
+<div onclick="this.innerHTML='Because you care.'" style="cursor:pointer;">Click me 🤍</div>
+<div onclick="this.innerHTML='Because you stay.'" style="cursor:pointer;">Click me 🤍</div>
+<div onclick="this.innerHTML='Because you laugh with me.'" style="cursor:pointer;">Click me 🤍</div>
+<div onclick="this.innerHTML='Because you support me.'" style="cursor:pointer;">Click me 🤍</div>
+<div onclick="this.innerHTML='Because you understand me.'" style="cursor:pointer;">Click me 🤍</div>
+<div onclick="this.innerHTML='Because you try.'" style="cursor:pointer;">Click me 🤍</div>
+<div onclick="this.innerHTML='Because it’s you.'" style="cursor:pointer;">Click me 🤍</div>
 </section>
 
 <section class="hidden">
 <h2>How Well Do You Know Us?</h2>
 <div id="quiz"></div>
-</section>
-
-<section class="hidden">
-<h2>Countdown to Our Next Date 🤍</h2>
-<div id="countdown"></div>
-</section>
-
-<section class="hidden">
-<h2>A Letter For You</h2>
-<p id="letter" style="opacity:0; transition:2s;">
-Write your deep emotional letter here.
-</p>
-<button onclick="document.getElementById('letter').style.opacity='1'">Read</button>
 </section>
 
 <section class="hidden">
@@ -161,96 +196,105 @@ Write your deep emotional letter here.
 </div>
 </section>
 
+<section class="hidden">
+<h2>A Letter For You</h2>
+
+<div class="envelope" onclick="openEnvelope(this)">
+<div class="flap"></div>
+<div class="letter">
+Write your emotional letter here.
+Make it honest. Make it unforgettable.
+</div>
+</div>
+
+</section>
+
 <script>
 
-// MUSIC PLAYLIST
+// MUSIC
 const songs = ["song1.mp3","song2.mp3","song3.mp3"];
-let index = 0;
-const player = document.getElementById("musicPlayer");
+let current = 0;
+const player = document.getElementById("player");
+const bar = document.getElementById("musicBar");
 
-function playMusic() {
-  player.src = songs[index];
+function playSong(){
+  player.src = songs[current];
   player.play();
 }
 
-player.addEventListener("ended", () => {
-  index = (index + 1) % songs.length;
-  playMusic();
+player.addEventListener("ended",()=>{
+  current = (current+1)%songs.length;
+  playSong();
 });
 
-// GATE
-function enterSite() {
-  document.getElementById("gate").style.display = "none";
-  playMusic();
-  document.querySelectorAll("section").forEach(sec => {
-    sec.classList.add("show");
-  });
+player.addEventListener("timeupdate",()=>{
+  let min = Math.floor(player.currentTime/60);
+  let sec = Math.floor(player.currentTime%60).toString().padStart(2,'0');
+  bar.innerHTML = "Now Playing 🤍 " + songs[current] + " — " + min + ":" + sec;
+});
+
+// ENTER SITE
+function enter(){
+  document.getElementById("gate").style.display="none";
+  playSong();
+  document.querySelectorAll("section").forEach(sec=>sec.classList.add("show"));
 }
 
-function nope() {
-  document.getElementById("noText").innerText = "Try again 🤍";
-}
-
-// REVEAL CARDS
-function reveal(card) {
-  card.innerHTML = "Because you make my world softer and brighter.";
+function nope(){
+  document.getElementById("noText").innerText="Try again 🤍";
 }
 
 // QUIZ
-const quizData = [
-{q:"Where was our first date?", a:"PUT_REAL_ANSWER", img:"q1.jpg"},
-{q:"First class together?", a:"PUT_REAL_ANSWER", img:"q2.jpg"},
-{q:"First trip?", a:"PUT_REAL_ANSWER", img:"q3.jpg"},
-{q:"Our song?", a:"PUT_REAL_ANSWER", img:"q4.jpg"},
-{q:"Favorite memory?", a:"PUT_REAL_ANSWER", img:"q5.jpg"},
-{q:"Inside joke?", a:"PUT_REAL_ANSWER", img:"q6.jpg"},
-{q:"Month we met?", a:"PUT_REAL_ANSWER", img:"q7.jpg"},
-{q:"Favorite restaurant?", a:"PUT_REAL_ANSWER", img:"q8.jpg"},
-{q:"Best day ever?", a:"PUT_REAL_ANSWER", img:"q9.jpg"},
-{q:"What are we building?", a:"PUT_REAL_ANSWER", img:"q10.jpg"}
+const quizData=[
+{q:"Where was our first date?",a:"answer1",img:"q1.jpg"},
+{q:"First trip?",a:"answer2",img:"q2.jpg"},
+{q:"Our song?",a:"answer3",img:"q3.jpg"},
+{q:"Inside joke?",a:"answer4",img:"q4.jpg"},
+{q:"Month we met?",a:"answer5",img:"q5.jpg"},
+{q:"Favorite restaurant?",a:"answer6",img:"q6.jpg"},
+{q:"Best memory?",a:"answer7",img:"q7.jpg"},
+{q:"First class?",a:"answer8",img:"q8.jpg"},
+{q:"First I love you?",a:"answer9",img:"q9.jpg"},
+{q:"What are we building?",a:"answer10",img:"q10.jpg"}
 ];
 
-const quizContainer = document.getElementById("quiz");
+const quizDiv=document.getElementById("quiz");
 
 quizData.forEach((item,i)=>{
-  quizContainer.innerHTML += `
-  <div>
-    <p>${item.q}</p>
-    <input id="ans${i}">
-    <button onclick="check(${i})">Submit</button>
-    <p id="res${i}"></p>
-    <img id="img${i}" src="${item.img}" class="quiz-image" style="display:none;">
-  </div>`;
+quizDiv.innerHTML+=`
+<div>
+<p>${item.q}</p>
+<input id="ans${i}">
+<button onclick="check(${i})">Submit</button>
+<p id="res${i}"></p>
+<img id="img${i}" src="${item.img}" class="quiz-image">
+</div>`;
 });
 
 function check(i){
-  let val = document.getElementById("ans"+i).value.toLowerCase().trim();
-  if(val === quizData[i].a.toLowerCase()){
-    document.getElementById("res"+i).innerHTML="Correct 🤍";
-    document.getElementById("img"+i).style.display="block";
-  } else {
-    document.getElementById("res"+i).innerHTML="Try again 🤍";
-  }
+let val=document.getElementById("ans"+i).value.toLowerCase().trim();
+if(val===quizData[i].a){
+document.getElementById("res"+i).innerHTML="Correct 🤍";
+document.getElementById("img"+i).style.display="block";
+}else{
+document.getElementById("res"+i).innerHTML="Try again 🤍";
+}
 }
 
-// COUNTDOWN
-let targetDate = new Date("Feb 14, 2026 18:00:00").getTime();
-setInterval(()=>{
-  let now = new Date().getTime();
-  let dist = targetDate - now;
-  let days = Math.floor(dist/(1000*60*60*24));
-  document.getElementById("countdown").innerHTML = days + " days 🤍";
-},1000);
+// ENVELOPE
+function openEnvelope(el){
+el.classList.toggle("open");
+}
 
-// FLOATING HEARTS
+// HEARTS
 setInterval(()=>{
-  let heart=document.createElement("div");
-  heart.className="heart";
-  heart.innerHTML="🤍";
-  heart.style.left=Math.random()*100+"vw";
-  heart.style.animationDuration=(Math.random()*3+3)+"s";
-  document.body.appendChild(heart);
-  setTimeout(()=>heart.remove(),6000);
+let heart=document.createElement("div");
+heart.className="heart";
+heart.innerHTML="🤍";
+heart.style.left=Math.random()*100+"vw";
+heart.style.animationDuration=(Math.random()*3+3)+"s";
+document.body.appendChild(heart);
+setTimeout(()=>heart.remove(),6000);
 },800);
 
 </script>
