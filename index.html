@@ -2,15 +2,15 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For HIS_NAME 🤍</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  font-family: 'Georgia', serif;
+  font-family: 'Playfair Display', serif;
   background: linear-gradient(to bottom, #fff5f7, #ffe3ec);
   color: #5a3e4d;
   text-align: center;
@@ -33,13 +33,40 @@ button {
   border-radius: 30px;
   cursor: pointer;
   font-size: 16px;
-  margin: 10px;
   transition: 0.3s;
 }
 
 button:hover { background: #ffb3c6; }
 
-#introScreen {
+.hidden { opacity: 0; transform: translateY(40px); transition: 1s; }
+.show { opacity: 1; transform: translateY(0); }
+
+.card {
+  background: white;
+  margin: 15px auto;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(255, 143, 171, 0.2);
+  width: 70%;
+  cursor: pointer;
+  transition: 0.6s;
+}
+
+.quiz-image {
+  max-width: 80%;
+  border-radius: 20px;
+  margin-top: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.vision img {
+  width: 200px;
+  margin: 15px;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+#gate {
   position: fixed;
   background: #fff5f7;
   height: 100vh;
@@ -48,22 +75,7 @@ button:hover { background: #ffb3c6; }
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 10;
-}
-
-.music-player {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: white;
-  padding: 15px;
-  border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(255,182,193,0.4);
-  font-size: 14px;
-}
-
-.music-player input {
-  width: 100px;
+  z-index: 20;
 }
 
 .heart {
@@ -75,134 +87,172 @@ button:hover { background: #ffb3c6; }
 }
 
 @keyframes float {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(110vh); }
+  0% {transform: translateY(0);}
+  100% {transform: translateY(110vh);}
 }
+
+#countdown { font-size: 22px; margin-top: 15px; }
 </style>
 </head>
 
 <body>
 
-<!-- INTRO -->
-<div id="introScreen">
-  <h1>Will you be my Valentine? 🤍</h1>
-  <button onclick="enterSite()">Yes 🤍</button>
-  <button onclick="sayNo()">No</button>
-  <p id="noMessage"></p>
+<!-- GATE -->
+<div id="gate">
+<h1>Will you be my Valentine? 🤍</h1>
+<button onclick="enterSite()">Yes</button>
+<button onclick="nope()">No</button>
+<p id="noText"></p>
 </div>
 
-<!-- MUSIC PLAYER UI -->
-<div class="music-player">
-  <div id="nowPlaying">Now Playing: </div>
-  <input type="range" min="0" max="1" step="0.01" id="volumeSlider">
+<audio id="musicPlayer"></audio>
+
+<section>
+<h1>Hi HIS_NAME 🤍</h1>
+<p>This entire universe is just for you.</p>
+</section>
+
+<section class="hidden">
+<h2>Our Story</h2>
+<p>The day we met...</p>
+<p>Our first date...</p>
+<p>The moment I knew this was different.</p>
+</section>
+
+<section class="hidden">
+<h2>10 Reasons I Adore You</h2>
+<div class="card" onclick="reveal(this)">Reason 1</div>
+<div class="card" onclick="reveal(this)">Reason 2</div>
+<div class="card" onclick="reveal(this)">Reason 3</div>
+<div class="card" onclick="reveal(this)">Reason 4</div>
+<div class="card" onclick="reveal(this)">Reason 5</div>
+<div class="card" onclick="reveal(this)">Reason 6</div>
+<div class="card" onclick="reveal(this)">Reason 7</div>
+<div class="card" onclick="reveal(this)">Reason 8</div>
+<div class="card" onclick="reveal(this)">Reason 9</div>
+<div class="card" onclick="reveal(this)">Reason 10</div>
+</section>
+
+<section class="hidden">
+<h2>How Well Do You Know Us?</h2>
+<div id="quiz"></div>
+</section>
+
+<section class="hidden">
+<h2>Countdown to Our Next Date 🤍</h2>
+<div id="countdown"></div>
+</section>
+
+<section class="hidden">
+<h2>A Letter For You</h2>
+<p id="letter" style="opacity:0; transition:2s;">
+Write your deep emotional letter here.
+</p>
+<button onclick="document.getElementById('letter').style.opacity='1'">Read</button>
+</section>
+
+<section class="hidden">
+<h2>Our Future 🤍</h2>
+<div class="vision">
+<img src="dream1.jpg">
+<img src="dream2.jpg">
+<img src="dream3.jpg">
+<img src="dream4.jpg">
 </div>
-
-<audio id="bgMusic"></audio>
-
-<section>
-  <h1>Hi HIS_NAME 🤍</h1>
-  <p>This whole universe is for you.</p>
-</section>
-
-<section>
-  <h2>Our Story</h2>
-  <p>Write your story here.</p>
-</section>
-
-<section id="letterSection">
-  <h2>A Letter For You</h2>
-  <p>Write your emotional letter here.</p>
 </section>
 
 <script>
-const playlist = [
-  {src: "song1.mp3", name: "Song Title 1"},
-  {src: "song2.mp3", name: "Song Title 2"},
-  {src: "song3.mp3", name: "Song Title 3"}
+
+// MUSIC PLAYLIST
+const songs = ["song1.mp3","song2.mp3","song3.mp3"];
+let index = 0;
+const player = document.getElementById("musicPlayer");
+
+function playMusic() {
+  player.src = songs[index];
+  player.play();
+}
+
+player.addEventListener("ended", () => {
+  index = (index + 1) % songs.length;
+  playMusic();
+});
+
+// GATE
+function enterSite() {
+  document.getElementById("gate").style.display = "none";
+  playMusic();
+  document.querySelectorAll("section").forEach(sec => {
+    sec.classList.add("show");
+  });
+}
+
+function nope() {
+  document.getElementById("noText").innerText = "Try again 🤍";
+}
+
+// REVEAL CARDS
+function reveal(card) {
+  card.innerHTML = "Because you make my world softer and brighter.";
+}
+
+// QUIZ
+const quizData = [
+{q:"Where was our first date?", a:"PUT_REAL_ANSWER", img:"q1.jpg"},
+{q:"First class together?", a:"PUT_REAL_ANSWER", img:"q2.jpg"},
+{q:"First trip?", a:"PUT_REAL_ANSWER", img:"q3.jpg"},
+{q:"Our song?", a:"PUT_REAL_ANSWER", img:"q4.jpg"},
+{q:"Favorite memory?", a:"PUT_REAL_ANSWER", img:"q5.jpg"},
+{q:"Inside joke?", a:"PUT_REAL_ANSWER", img:"q6.jpg"},
+{q:"Month we met?", a:"PUT_REAL_ANSWER", img:"q7.jpg"},
+{q:"Favorite restaurant?", a:"PUT_REAL_ANSWER", img:"q8.jpg"},
+{q:"Best day ever?", a:"PUT_REAL_ANSWER", img:"q9.jpg"},
+{q:"What are we building?", a:"PUT_REAL_ANSWER", img:"q10.jpg"}
 ];
 
-let currentSong = 0;
-let musicStarted = false;
-const audio = document.getElementById("bgMusic");
-const nowPlaying = document.getElementById("nowPlaying");
-const volumeSlider = document.getElementById("volumeSlider");
+const quizContainer = document.getElementById("quiz");
 
-volumeSlider.value = 0.7;
-audio.volume = 0.7;
-
-volumeSlider.addEventListener("input", function() {
-  audio.volume = this.value;
+quizData.forEach((item,i)=>{
+  quizContainer.innerHTML += `
+  <div>
+    <p>${item.q}</p>
+    <input id="ans${i}">
+    <button onclick="check(${i})">Submit</button>
+    <p id="res${i}"></p>
+    <img id="img${i}" src="${item.img}" class="quiz-image" style="display:none;">
+  </div>`;
 });
 
-function playSong(index) {
-  audio.src = playlist[index].src;
-  nowPlaying.innerText = "Now Playing: " + playlist[index].name;
-  audio.play();
-}
-
-audio.addEventListener("ended", function() {
-  fadeOut(() => {
-    currentSong++;
-    if (currentSong >= playlist.length) {
-      currentSong = 0;
-    }
-    playSong(currentSong);
-    fadeIn();
-  });
-});
-
-function fadeOut(callback) {
-  let fade = setInterval(() => {
-    if (audio.volume > 0.05) {
-      audio.volume -= 0.05;
-    } else {
-      clearInterval(fade);
-      callback();
-    }
-  }, 100);
-}
-
-function fadeIn() {
-  let fade = setInterval(() => {
-    if (audio.volume < volumeSlider.value) {
-      audio.volume = Math.min(audio.volume + 0.05, volumeSlider.value);
-    } else {
-      clearInterval(fade);
-    }
-  }, 100);
-}
-
-function enterSite() {
-  document.getElementById("introScreen").style.display = "none";
-  if (!musicStarted) {
-    playSong(currentSong);
-    musicStarted = true;
-  }
-}
-
-function sayNo() {
-  document.getElementById("noMessage").innerText = "Try again 🤍";
-}
-
-window.addEventListener("scroll", function() {
-  const letterSection = document.getElementById("letterSection");
-  const rect = letterSection.getBoundingClientRect();
-  if (rect.top < window.innerHeight && rect.bottom >= 0) {
-    audio.volume = 0.3;
+function check(i){
+  let val = document.getElementById("ans"+i).value.toLowerCase().trim();
+  if(val === quizData[i].a.toLowerCase()){
+    document.getElementById("res"+i).innerHTML="Correct 🤍";
+    document.getElementById("img"+i).style.display="block";
   } else {
-    audio.volume = volumeSlider.value;
+    document.getElementById("res"+i).innerHTML="Try again 🤍";
   }
-});
+}
 
-setInterval(() => {
-  let heart = document.createElement("div");
-  heart.className = "heart";
-  heart.innerHTML = "🤍";
-  heart.style.left = Math.random() * 100 + "vw";
-  heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
+// COUNTDOWN
+let targetDate = new Date("Feb 14, 2026 18:00:00").getTime();
+setInterval(()=>{
+  let now = new Date().getTime();
+  let dist = targetDate - now;
+  let days = Math.floor(dist/(1000*60*60*24));
+  document.getElementById("countdown").innerHTML = days + " days 🤍";
+},1000);
+
+// FLOATING HEARTS
+setInterval(()=>{
+  let heart=document.createElement("div");
+  heart.className="heart";
+  heart.innerHTML="🤍";
+  heart.style.left=Math.random()*100+"vw";
+  heart.style.animationDuration=(Math.random()*3+3)+"s";
   document.body.appendChild(heart);
-  setTimeout(() => heart.remove(), 6000);
-}, 800);
+  setTimeout(()=>heart.remove(),6000);
+},800);
+
 </script>
 
 </body>
