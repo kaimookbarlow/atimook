@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>For Atimaay 🤍</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: 'Playfair Display', serif;
+  background: linear-gradient(to bottom, #fff5f7, #ffe3ec);
+  color: #5a3e4d;
+  text-align: center;
+  overflow-x: hidden;
+}
+
+section {
+  padding: 100px 20px;
+  max-width: 900px;
+  margin: auto;
+}
+
+h1, h2 {
+  font-weight: 500;
+}
+
+button {
+  padding: 12px 25px;
+  background: #ff8fab;
+  border: none;
+  color: white;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #ffb3c6;
+}
+
+.hidden {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: 1s;
+}
+
+.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card {
+  background: white;
+  margin: 15px auto;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(255, 143, 171, 0.2);
+  width: 70%;
+  cursor: pointer;
+  transition: 0.6s;
+}
+
+#lockScreen {
+  position: fixed;
+  background: #fff5f7;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+input {
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid #ffb3c6;
+  margin-top: 10px;
+}
+
+.heart {
+  position: fixed;
+  top: -10px;
+  font-size: 20px;
+  animation: float 6s linear infinite;
+  opacity: 0.5;
+}
+
+@keyframes float {
+  0% {transform: translateY(0);}
+  100% {transform: translateY(110vh);}
+}
+
+#countdown {
+  font-size: 22px;
+  margin-top: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="lockScreen">
+<h2>Enter Our Secret 🤍</h2>
+<input id="passwordInput" type="password">
+<button onclick="checkPassword()">Unlock</button>
+<p id="errorMsg"></p>
+</div>
+
+<section>
+<h1>Hi HIS_NAME 🤍</h1>
+<p>This entire universe is just for you.</p>
+<button onclick="startExperience()">Begin</button>
+</section>
+
+<section class="hidden">
+<h2>Our Story</h2>
+<p>✨ The day we met — write your memory</p>
+<p>✨ Our first date — write it beautifully</p>
+<p>✨ The moment I knew — this was different</p>
+</section>
+
+<section class="hidden">
+<h2>10 Reasons I Adore You</h2>
+<div class="card" onclick="reveal(this)">Click me</div>
+<div class="card" onclick="reveal(this)">Click me</div>
+<div class="card" onclick="reveal(this)">Click me</div>
+<div class="card" onclick="reveal(this)">Click me</div>
+<div class="card" onclick="reveal(this)">Click me</div>
+<div class="card" onclick="reveal(this)">Click me</div>
+<div class="card" onclick="reveal(this)">Click me</div>
+<div class="card" onclick="reveal(this)">Click me</div>
+<div class="card" onclick="reveal(this)">Click me</div>
+<div class="card" onclick="reveal(this)">Click me</div>
+</section>
+
+<section class="hidden">
+<h2>How Well Do You Know Us?</h2>
+<p>Where was our first date?</p>
+<input id="quizAnswer">
+<button onclick="checkQuiz()">Submit</button>
+<p id="quizResult"></p>
+</section>
+
+<section class="hidden">
+<h2>Countdown to Our Next Visit 🤍</h2>
+<div id="countdown"></div>
+</section>
+
+<section class="hidden">
+<h2>A Letter For You</h2>
+<p id="letterText" style="opacity:0; transition:2s;">
+Write your deep emotional letter here.
+Make it soft. Make it honest. Make it unforgettable.
+</p>
+<button onclick="revealLetter()">Read</button>
+</section>
+
+<section class="hidden">
+<h2>Our Future</h2>
+<p>✈️ Places we'll go</p>
+<p>🏡 Dreams we'll build</p>
+<p>🤍 Everything ahead of us</p>
+</section>
+
+<audio id="music" loop>
+<source src="song.mp3" type="audio/mpeg">
+</audio>
+<button onclick="toggleMusic()">Music 🤍</button>
+
+<script>
+function checkPassword() {
+  let input = document.getElementById("passwordInput").value;
+  if(input === "213214") {
+    document.getElementById("lockScreen").style.display = "none";
+  } else {
+    document.getElementById("errorMsg").innerText = "Wrong secret 🤍";
+  }
+}
+
+function startExperience() {
+  document.querySelectorAll("section").forEach(sec => {
+    sec.classList.add("show");
+  });
+}
+
+function reveal(card) {
+  card.innerHTML = "Because you make my world softer and brighter.";
+}
+
+function checkQuiz() {
+  let answer = document.getElementById("quizAnswer").value;
+  let result = document.getElementById("quizResult");
+  if(answer.toLowerCase() === "PUT_REAL_ANSWER") {
+    result.innerHTML = "Correct 🤍";
+  } else {
+    result.innerHTML = "Try again 🤍";
+  }
+}
+
+function revealLetter() {
+  document.getElementById("letterText").style.opacity = "1";
+}
+
+let targetDate = new Date("March 20, 2026 18:00:00").getTime();
+setInterval(function() {
+  let now = new Date().getTime();
+  let distance = targetDate - now;
+  let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  document.getElementById("countdown").innerHTML = days + " days 🤍";
+}, 1000);
+
+function toggleMusic() {
+  let music = document.getElementById("music");
+  if(music.paused) {
+    music.play();
+  } else {
+    music.pause();
+  }
+}
+
+setInterval(() => {
+  let heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerHTML = "🤍";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 6000);
+}, 800);
+</script>
+
+</body>
+</html>
