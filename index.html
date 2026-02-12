@@ -230,7 +230,14 @@ player.addEventListener("ended",()=>{
 player.addEventListener("timeupdate",()=>{
   let min = Math.floor(player.currentTime/60);
   let sec = Math.floor(player.currentTime%60).toString().padStart(2,'0');
-  bar.innerHTML = "Now Playing 🤍 " + songs[current] + " — " + min + ":" + sec;
+  bar.innerHTML = "Now Playing: " + 
+    if songs[current] = "until_i_found_you.mp3":
+      "Until I Found You"
+    elif songs[current] = "sparks.mp3":
+      "Sparks"
+    elif songs[current] = "every_breath_you_take.mp3":
+      "Every Breath You Take"
+    + " — " + min + ":" + sec;
 });
 
 // ENTER SITE
