@@ -3,369 +3,426 @@
 <head>
 <meta charset="UTF-8">
 <title>For Atimaay 🤍</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
-html { scroll-behavior: smooth; }
 
-body {
-  margin: 0;
-  font-family: 'Playfair Display', serif;
-  background: linear-gradient(to bottom, #fff5f7, #ffe3ec);
-  color: #5a3e4d;
-  text-align: center;
-  overflow-x: hidden;
+body{
+  margin:0;
+  font-family:'Inter', sans-serif;
+  background: radial-gradient(circle at top, #ffe6ec, #f8d7ff);
+  overflow-x:hidden;
+  color:#333;
 }
 
-/* MUSIC BAR */
-#musicBar {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background: #ff8fab;
-  color: white;
-  padding: 8px;
-  font-size: 14px;
-  z-index: 1000;
+/* ---------- GLOBAL 3D FEEL ---------- */
+
+section{
+  padding:120px 20px;
+  text-align:center;
+  transform: translateZ(0);
 }
 
-/* GATE */
-#gate {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+h1,h2{
+  font-family:'Playfair Display', serif;
 }
 
-.indent {
-  margin-left: 40px;
+/* ---------- MUSIC BAR ---------- */
+
+.music-bar{
+  position:fixed;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%);
+  backdrop-filter:blur(20px);
+  background:rgba(255,255,255,0.25);
+  padding:12px 25px;
+  border-radius:40px;
+  box-shadow:0 8px 30px rgba(0,0,0,0.15);
+  display:flex;
+  align-items:center;
+  gap:15px;
+  z-index:999;
 }
 
-.buttonRow {
-  display: flex;
-  gap: 120px;
-  margin-top: 30px;
+.music-bar button{
+  background:none;
+  border:none;
+  font-size:18px;
+  cursor:pointer;
 }
 
-button {
-  padding: 12px 25px;
-  background: #ff8fab;
-  border: none;
-  color: white;
-  border-radius: 30px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: 0.3s;
+.music-bar span{
+  font-size:14px;
+  font-weight:500;
 }
 
-button:hover { background: #ffb3c6; }
+/* ---------- FIRST PAGE ---------- */
 
-section {
-  padding: 120px 20px;
-  max-width: 1000px;
-  margin: auto;
+.hero{
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
 }
 
-.hidden { opacity: 0; transform: translateY(40px); transition: 1s; }
-.show { opacity: 1; transform: translateY(0); }
-
-/* VISION BOARD */
-.vision img {
-  width: 400px;
-  margin: 20px;
-  border-radius: 25px;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+.hero h1{
+  font-size:52px;
+  margin-bottom:20px;
 }
 
-/* QUIZ IMAGES */
-.quiz-image {
-  max-width: 80%;
-  border-radius: 20px;
-  margin-top: 15px;
-  display: none;
+.question{
+  font-size:32px;
+  margin:20px 0 40px;
 }
 
-/* ENVELOPE CONTAINER */
-.envelope-wrapper {
-  position: relative;
-  width: 320px;
-  height: 220px;
-  margin: 60px auto;
-  cursor: pointer;
+.btns{
+  display:flex;
+  gap:120px;
 }
 
-.envelope {
-  width: 100%;
-  height: 100%;
-  background: #ffb3c6;
-  border-radius: 10px;
-  position: relative;
-  overflow: hidden;
+button.primary{
+  padding:15px 40px;
+  font-size:20px;
+  border:none;
+  border-radius:40px;
+  cursor:pointer;
+  transition:0.3s;
+  box-shadow:0 10px 25px rgba(0,0,0,0.2);
 }
 
-/* FLAP */
-.flap {
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-left: 160px solid transparent;
-  border-right: 160px solid transparent;
-  border-bottom: 110px solid #ff8fab;
-  top: 0;
-  left: 0;
-  transform-origin: top;
-  transition: transform 0.8s ease;
-  z-index: 2;
+.yes{
+  background:linear-gradient(45deg,#ff8fb1,#ff5fa2);
+  color:white;
 }
 
-/* LETTER FULLSCREEN */
-.full-letter {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #fff5f7;
-  color: #5a3e4d;
-  padding: 80px 20px;
-  box-sizing: border-box;
-  transform: translateY(100%);
-  transition: transform 0.8s ease;
-  z-index: 2000;
-  overflow-y: auto;
+.no{
+  background:linear-gradient(45deg,#ccc,#999);
+  color:white;
 }
 
-/* When Open */
-.open .flap {
-  transform: rotateX(180deg);
+button.primary:hover{
+  transform:translateY(-5px);
 }
 
-.open .full-letter {
-  transform: translateY(0);
+/* ---------- ENVELOPE ---------- */
+
+.envelope-wrapper{
+  perspective:1000px;
+  margin-top:40px;
 }
 
-/* EXIT BUTTON */
-.close-btn {
-  position: absolute;
-  top: 20px;
-  right: 30px;
-  font-size: 18px;
-  background: #ff8fab;
-  border: none;
-  color: white;
-  padding: 8px 18px;
-  border-radius: 20px;
-  cursor: pointer;
+.envelope{
+  width:320px;
+  height:200px;
+  margin:auto;
+  position:relative;
+  transform-style:preserve-3d;
 }
 
-
-/* HEARTS */
-.heart {
-  position: fixed;
-  top: -10px;
-  font-size: 20px;
-  animation: float 6s linear infinite;
-  opacity: 0.5;
+.flap{
+  width:100%;
+  height:100%;
+  background:#ff8fb1;
+  clip-path:polygon(0 0,100% 0,50% 70%);
+  position:absolute;
+  top:0;
+  left:0;
+  transition:0.8s;
+  cursor:pointer;
+  transform-origin:top;
+  box-shadow:0 10px 25px rgba(0,0,0,0.3);
 }
 
-@keyframes float {
-  0% {transform: translateY(0);}
-  100% {transform: translateY(110vh);}
+.envelope.open .flap{
+  transform:rotateX(180deg);
 }
+
+.paper{
+  position:absolute;
+  bottom:0;
+  width:100%;
+  height:100%;
+  background:white;
+  transform:translateY(100%);
+  transition:0.8s;
+  box-shadow:0 20px 40px rgba(0,0,0,0.3);
+}
+
+.envelope.open .paper{
+  transform:translateY(0);
+}
+
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+}
+
+.overlay.active{
+  display:flex;
+}
+
+.letter{
+  background:#fffdf9;
+  width:70%;
+  max-width:700px;
+  padding:60px;
+  border-radius:20px;
+  box-shadow:0 30px 60px rgba(0,0,0,0.4);
+  animation:fadeUp 0.6s ease;
+}
+
+@keyframes fadeUp{
+  from{transform:translateY(40px); opacity:0;}
+  to{transform:translateY(0); opacity:1;}
+}
+
+/* ---------- REASONS ---------- */
+
+.reasons{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:30px;
+  margin-top:50px;
+}
+
+.reason{
+  perspective:1000px;
+}
+
+.card{
+  position:relative;
+  width:100%;
+  height:150px;
+  transform-style:preserve-3d;
+  transition:0.6s;
+  cursor:pointer;
+}
+
+.card.flip{
+  transform:rotateY(180deg);
+}
+
+.card div{
+  position:absolute;
+  inset:0;
+  backface-visibility:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:15px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.2);
+  padding:15px;
+}
+
+.front{
+  background:linear-gradient(45deg,#ffb6c1,#ffd1dc);
+}
+
+.back{
+  background:white;
+  transform:rotateY(180deg);
+}
+
+/* ---------- WORDLE ---------- */
+
+.wordle{
+  margin-top:60px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(5,60px);
+  gap:10px;
+  justify-content:center;
+  margin-top:20px;
+}
+
+.tile{
+  width:60px;
+  height:60px;
+  background:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  font-weight:bold;
+  border-radius:10px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.2);
+}
+
+.correct{background:#6aaa64;color:white;}
+.present{background:#c9b458;color:white;}
+.wrong{background:#787c7e;color:white;}
+
+input{
+  margin-top:20px;
+  padding:10px;
+  font-size:16px;
+  border-radius:10px;
+  border:none;
+}
+
 </style>
 </head>
 
 <body>
 
-<div id="musicBar">Not playing</div>
+<div class="music-bar">
+  <button onclick="prevSong()">⏮</button>
+  <button onclick="togglePlay()">⏯</button>
+  <button onclick="nextSong()">⏭</button>
+  <span id="songInfo">Song 1 - 0:00</span>
+</div>
+
 <audio id="player"></audio>
+<audio id="clickSound" src="click.mp3"></audio>
 
-<!-- FIRST SCREEN -->
-<div id="gate">
-<h1>Dear Atimaay,</h1>
-<h2 class="indent">Will you be my Valentine?</h2>
-
-<div class="buttonRow">
-<button onclick="enter()">YES</button>
-<button onclick="nope()">NO</button>
-</div>
-
-<p id="noText"></p>
-</div>
-
-<!-- MAIN CONTENT -->
-
-<section class="hidden">
-<h2>Our Story 🤍</h2>
-<p>The day we met...</p>
-<p>Our first date...</p>
-<p>The moment I knew.</p>
+<section class="hero">
+  <h1>Dear Atimaay,</h1>
+  <div class="question">Will you be my Valentine?</div>
+  <div class="btns">
+    <button class="primary yes" onclick="sayYes()">YES</button>
+    <button class="primary no" onclick="playClick(); alert('Try again. 😉')">NO</button>
+  </div>
 </section>
 
-<section class="hidden">
-<h2>10 Reasons I Adore You</h2>
-<div onclick="this.innerHTML='Because you make my world softer.'" style="cursor:pointer;">Click me 🤍</div>
-<div onclick="this.innerHTML='Because you choose me.'" style="cursor:pointer;">Click me 🤍</div>
-<div onclick="this.innerHTML='Because you listen.'" style="cursor:pointer;">Click me 🤍</div>
-<div onclick="this.innerHTML='Because you care.'" style="cursor:pointer;">Click me 🤍</div>
-<div onclick="this.innerHTML='Because you stay.'" style="cursor:pointer;">Click me 🤍</div>
-<div onclick="this.innerHTML='Because you laugh with me.'" style="cursor:pointer;">Click me 🤍</div>
-<div onclick="this.innerHTML='Because you support me.'" style="cursor:pointer;">Click me 🤍</div>
-<div onclick="this.innerHTML='Because you understand me.'" style="cursor:pointer;">Click me 🤍</div>
-<div onclick="this.innerHTML='Because you try.'" style="cursor:pointer;">Click me 🤍</div>
-<div onclick="this.innerHTML='Because it’s you.'" style="cursor:pointer;">Click me 🤍</div>
+<section id="letterSection" style="display:none;">
+  <h2>A Letter For You</h2>
+  <div class="envelope-wrapper">
+    <div class="envelope" id="envelope">
+      <div class="flap" onclick="openLetter()"></div>
+      <div class="paper"></div>
+    </div>
+  </div>
 </section>
 
-<section class="hidden">
-<h2>How Well Do You Know Us?</h2>
-<div id="quiz"></div>
-</section>
-
-<section class="hidden">
-<h2>Our Future 🤍</h2>
-<div class="vision">
-<img src="dream1.jpg">
-<img src="dream2.jpg">
-<img src="dream3.jpg">
-<img src="dream4.jpg">
-</div>
-</section>
-
-<section class="hidden">
-<h2>A Letter For You 🤍</h2>
-
-<div class="envelope-wrapper" onclick="openEnvelope()">
-  <div class="envelope">
-    <div class="flap"></div>
+<div class="overlay" id="overlay" onclick="closeLetter(event)">
+  <div class="letter">
+    <h2>My Love,</h2>
+    <p>
+      We have grown, learned, healed, and chosen each other again and again.
+      I am proud of us. I am proud of you.
+      I don’t just love you.
+      I choose you.
+      Every time.
+    </p>
   </div>
 </div>
 
-<div id="letterOverlay" class="full-letter">
-  <button class="close-btn" onclick="closeEnvelope()">Exit</button>
-  
-  <h1>Dear Atimaay,</h1>
-  <p style="max-width:700px;margin:40px auto;font-size:20px;line-height:1.8;">
-    I am so grateful to have you as my Valentine this year —
-    and hopefully every year after.
-    <br><br>
-    Thank you for choosing me.
-    Thank you for staying.
-    Thank you for building something real with me.
-    <br><br>
-    I love you.
-  </p>
-</div>
+<section>
+  <h2>10 Reasons I Love You</h2>
+  <div class="reasons">
+    <div class="reason"><div class="card" onclick="flip(this)"><div class="front">1</div><div class="back">Your laugh</div></div></div>
+    <div class="reason"><div class="card" onclick="flip(this)"><div class="front">2</div><div class="back">Your kindness</div></div></div>
+    <div class="reason"><div class="card" onclick="flip(this)"><div class="front">3</div><div class="back">Your mind</div></div></div>
+    <div class="reason"><div class="card" onclick="flip(this)"><div class="front">4</div><div class="back">Your ambition</div></div></div>
+    <div class="reason"><div class="card" onclick="flip(this)"><div class="front">5</div><div class="back">You choose me</div></div></div>
+  </div>
+</section>
 
+<section>
+  <h2>Couple Wordle</h2>
+  <div class="wordle">
+    <div class="grid" id="grid"></div>
+    <input id="guessInput" maxlength="5" placeholder="5 letter word">
+    <button onclick="submitGuess()">Guess</button>
+  </div>
 </section>
 
 <script>
 
-// MUSIC
-const songs = ["until_i_found_you.mp3","sparks.mp3","every_breath_you_take.mp3", "stand_by_me.mp3", "cant_take_my_eyes_off_you.mp3", "we_belong_together.mp3", "i_love_you_so.mp3"];
-let current = 0;
-const player = document.getElementById("player");
-const bar = document.getElementById("musicBar");
+const songs=["song1.mp3","song2.mp3","song3.mp3"];
+let current=0;
+const player=document.getElementById("player");
+player.src=songs[0];
 
-function playSong(){
-  player.src = songs[current];
+function togglePlay(){
+  playClick();
+  if(player.paused) player.play();
+  else player.pause();
+}
+
+function nextSong(){
+  playClick();
+  current=(current+1)%songs.length;
+  player.src=songs[current];
   player.play();
 }
 
-player.addEventListener("ended",()=>{
-  current = (current+1)%songs.length;
-  playSong();
-});
-
-function getSongName(file){
-  const names = {
-    "until_i_found_you.mp3": "Until I Found You",
-    "sparks.mp3": "Sparks",
-    "every_breath_you_take.mp3": "Every Breath You Take",
-    "stand_by_me.mp3": "Stand By Me",
-    "cant_take_my_eyes_off_you.mp3": "Can't Take My Eyes Off You",
-    "we_belong_together.mp3": "We Belong Together",
-    "i_love_you_so.mp3": "I Love You So"
-  };
-  return names[file] || file;
+function prevSong(){
+  playClick();
+  current=(current-1+songs.length)%songs.length;
+  player.src=songs[current];
+  player.play();
 }
 
 player.addEventListener("timeupdate",()=>{
-  let min = Math.floor(player.currentTime/60);
-  let sec = Math.floor(player.currentTime%60).toString().padStart(2,'0');
-
-  bar.innerHTML = "Now Playing: " 
-    + getSongName(songs[current]) 
-    + " — " + min + ":" + sec;
+  const min=Math.floor(player.currentTime/60);
+  const sec=Math.floor(player.currentTime%60).toString().padStart(2,'0');
+  document.getElementById("songInfo").innerText=`Song ${current+1} - ${min}:${sec}`;
 });
 
-// ENTER SITE
-function enter(){
-  document.getElementById("gate").style.display="none";
-  playSong();
-  document.querySelectorAll("section").forEach((sec, i)=>{
-  setTimeout(()=>{
-    sec.classList.add("show");
-  }, i * 500);
-});
+function playClick(){
+  document.getElementById("clickSound").play();
 }
 
-function nope(){
-  document.getElementById("noText").innerText="Try again 🤍";
+function sayYes(){
+  playClick();
+  document.querySelector(".hero").style.display="none";
+  document.getElementById("letterSection").style.display="block";
 }
 
-// QUIZ
-const quizData=[
-{q:"Where was our first date?",a:"answer1",img:"q1.jpg"},
-{q:"First trip?",a:"answer2",img:"q2.jpg"},
-{q:"Our song?",a:"answer3",img:"q3.jpg"},
-{q:"Inside joke?",a:"answer4",img:"q4.jpg"},
-{q:"Month we met?",a:"answer5",img:"q5.jpg"},
-{q:"Favorite restaurant?",a:"answer6",img:"q6.jpg"},
-{q:"Best memory?",a:"answer7",img:"q7.jpg"},
-{q:"First class?",a:"answer8",img:"q8.jpg"},
-{q:"First I love you?",a:"answer9",img:"q9.jpg"},
-{q:"What are we building?",a:"answer10",img:"q10.jpg"}
-];
-
-const quizDiv=document.getElementById("quiz");
-
-quizData.forEach((item,i)=>{
-quizDiv.innerHTML+=`
-<div>
-<p>${item.q}</p>
-<input id="ans${i}">
-<button onclick="check(${i})">Submit</button>
-<p id="res${i}"></p>
-<img id="img${i}" src="${item.img}" class="quiz-image">
-</div>`;
-});
-
-function check(i){
-let val=document.getElementById("ans"+i).value.toLowerCase().trim();
-if(val===quizData[i].a){
-document.getElementById("res"+i).innerHTML="Correct 🤍";
-document.getElementById("img"+i).style.display="block";
-}else{
-document.getElementById("res"+i).innerHTML="Try again 🤍";
-}
+function openLetter(){
+  playClick();
+  document.getElementById("envelope").classList.add("open");
+  setTimeout(()=>document.getElementById("overlay").classList.add("active"),600);
 }
 
-// ENVELOPE
-function openEnvelope(el){
-el.classList.toggle("open");
+function closeLetter(e){
+  if(!e.target.closest(".letter")){
+    document.getElementById("overlay").classList.remove("active");
+  }
 }
 
-// HEARTS
-setInterval(()=>{
-let heart=document.createElement("div");
-heart.className="heart";
-heart.innerHTML="🤍";
-heart.style.left=Math.random()*100+"vw";
-heart.style.animationDuration=(Math.random()*3+3)+"s";
-document.body.appendChild(heart);
-setTimeout(()=>heart.remove(),6000);
-},800);
+function flip(card){
+  playClick();
+  card.classList.toggle("flip");
+}
+
+/* WORDLE */
+
+const answer="HEART";
+const grid=document.getElementById("grid");
+let row=0;
+
+for(let i=0;i<30;i++){
+  const div=document.createElement("div");
+  div.className="tile";
+  grid.appendChild(div);
+}
+
+function submitGuess(){
+  playClick();
+  const guess=document.getElementById("guessInput").value.toUpperCase();
+  if(guess.length!==5) return;
+
+  for(let i=0;i<5;i++){
+    const tile=grid.children[row*5+i];
+    tile.innerText=guess[i];
+    if(guess[i]===answer[i]) tile.classList.add("correct");
+    else if(answer.includes(guess[i])) tile.classList.add("present");
+    else tile.classList.add("wrong");
+  }
+  row++;
+  document.getElementById("guessInput").value="";
+}
 
 </script>
 
