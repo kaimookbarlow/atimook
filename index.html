@@ -96,6 +96,7 @@ section {
   cursor: pointer;
   border-radius: 10px;
   transition: 0.8s;
+  perspective: 1000px;
 }
 
 .flap {
@@ -108,6 +109,7 @@ section {
   top: -100px;
   left: 0;
   transition: 0.8s;
+  transform-origin: top;
 }
 
 .letter {
@@ -212,7 +214,7 @@ I am so grateful to be able to have you as my valentines this year and for the r
 <script>
 
 // MUSIC
-const songs = ["until_i_found_you.mp3","sparks.mp3","every_breath_you_take.mp3"];
+const songs = ["until_i_found_you.mp3","sparks.mp3","every_breath_you_take.mp3", "stand_by_me.mp3", "cant_take_my_eyes_off_you.mp3", "we_belong_together.mp3", "i_love_you_so.mp3"];
 let current = 0;
 const player = document.getElementById("player");
 const bar = document.getElementById("musicBar");
@@ -227,16 +229,25 @@ player.addEventListener("ended",()=>{
   playSong();
 });
 
+function getSongName(file){
+  const names = {
+    "until_i_found_you.mp3": "Until I Found You",
+    "sparks.mp3": "Sparks",
+    "every_breath_you_take.mp3": "Every Breath You Take",
+    "stand_by_me.mp3": "Stand By Me",
+    "cant_take_my_eyes_off_you.mp3": "Can't Take My Eyes Off You",
+    "we_belong_together.mp3": "We Belong Together",
+    "i_love_you_so.mp3": "I Love You So"
+  };
+  return names[file] || file;
+}
+
 player.addEventListener("timeupdate",()=>{
   let min = Math.floor(player.currentTime/60);
   let sec = Math.floor(player.currentTime%60).toString().padStart(2,'0');
-  bar.innerHTML = "Now Playing: " + 
-    if songs[current] = "until_i_found_you.mp3":
-      "Until I Found You"
-    elif songs[current] = "sparks.mp3":
-      "Sparks"
-    elif songs[current] = "every_breath_you_take.mp3":
-      "Every Breath You Take"
+
+  bar.innerHTML = "Now Playing: " 
+    + getSongName(songs[current]) 
     + " — " + min + ":" + sec;
 });
 
@@ -244,7 +255,11 @@ player.addEventListener("timeupdate",()=>{
 function enter(){
   document.getElementById("gate").style.display="none";
   playSong();
-  document.querySelectorAll("section").forEach(sec=>sec.classList.add("show"));
+  document.querySelectorAll("section").forEach((sec, i)=>{
+  setTimeout(()=>{
+    sec.classList.add("show");
+  }, i * 500);
+});
 }
 
 function nope(){
