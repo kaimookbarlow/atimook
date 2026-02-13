@@ -1,430 +1,1444 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>For Atimaay 🤍</title>
+  <meta charset="UTF-8">
+  <title>For Atimaay 🤍</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    :root {
+      --pink-deep: #c71585;
+      --pink-mid: #db7093;
+      --pink-soft: #ffb6c1;
+      --pink-pale: #ffe4ec;
+      --shadow-soft: 0 10px 40px rgba(199, 21, 133, 0.15);
+      --shadow-strong: 0 20px 60px rgba(199, 21, 133, 0.25);
+    }
 
-<style>
+    body {
+      margin: 0;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      background: linear-gradient(135deg, #fff0f5 0%, #ffe4ec 30%, #ffd6e0 60%, #ffcce0 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: #5a3e4d;
+    }
 
-body{
-  margin:0;
-  font-family:'Inter', sans-serif;
-  background: radial-gradient(circle at top, #ffe6ec, #f8d7ff);
-  overflow-x:hidden;
-  color:#333;
-}
+    /* ---------- FLOATING HEARTS ---------- */
+    .hearts-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .heart-float {
+      position: absolute;
+      font-size: 24px;
+      opacity: 0.15;
+      animation: floatHeart 12s ease-in-out infinite;
+    }
+    .heart-float:nth-child(odd) { animation-duration: 15s; animation-delay: -2s; }
+    .heart-float:nth-child(3n) { opacity: 0.25; animation-duration: 10s; }
+    .heart-float:nth-child(5n) { opacity: 0.1; font-size: 18px; }
+    .heart-float:nth-child(7n) { opacity: 0.3; font-size: 30px; }
+    @keyframes floatHeart {
+      0%, 100% { transform: translate(0, 100vh) rotate(0deg); opacity: 0.1; }
+      25% { transform: translate(20px, 60vh) rotate(90deg); }
+      50% { transform: translate(-15px, 30vh) rotate(180deg); }
+      75% { transform: translate(10px, 10vh) rotate(270deg); }
+    }
 
-/* ---------- GLOBAL 3D FEEL ---------- */
+    /* ---------- MUSIC BAR ---------- */
+    .music-bar {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.25);
+      padding: 12px 25px;
+      border-radius: 40px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      z-index: 999;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+    .music-bar button {
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .music-bar span {
+      font-size: 14px;
+      font-weight: 500;
+      color: #5a3e4d;
+    }
 
-section{
-  padding:120px 20px;
-  text-align:center;
-  transform: translateZ(0);
-}
+    /* ---------- PAGE SYSTEM ---------- */
+    .page {
+      position: absolute;
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.8s ease;
+      z-index: 1;
+      padding: 80px 24px 100px;
+    }
+    .page.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .page h1, .page h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      text-shadow: 0 4px 20px rgba(199, 21, 133, 0.2);
+    }
 
-h1,h2{
-  font-family:'Playfair Display', serif;
-}
+    /* ---------- NEXT / PREVIOUS PAGE BUTTONS (same style) ---------- */
+    .nextBtn, .prevBtn {
+      position: fixed;
+      bottom: 40px;
+      font-size: 28px;
+      background: linear-gradient(145deg, #ff8fab, #db7093);
+      color: white;
+      border: none;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(199, 21, 133, 0.4);
+      z-index: 100;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .nextBtn { right: 40px; }
+    .prevBtn { left: 40px; transform: scaleX(-1); }
+    .nextBtn:hover, .prevBtn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 15px 40px rgba(199, 21, 133, 0.5);
+    }
+    .prevBtn:hover { transform: scaleX(-1) scale(1.1); }
 
-/* ---------- MUSIC BAR ---------- */
+    /* ---------- POPUP / MODAL ---------- */
+    .popup-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .popup-overlay.show {
+      display: flex;
+    }
+    .popup-box {
+      background: white;
+      border-radius: 20px;
+      padding: 28px 32px;
+      max-width: 400px;
+      box-shadow: 0 20px 60px rgba(199, 21, 133, 0.3);
+      border: 2px solid #ffb6c1;
+      text-align: center;
+    }
+    .popup-box p { margin: 0 0 20px 0; font-size: 18px; line-height: 1.5; color: #5a3e4d; }
+    .popup-box .popup-ok {
+      padding: 12px 28px;
+      border-radius: 30px;
+      background: linear-gradient(145deg, #ff8fab, #db7093);
+      color: white;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+    }
 
-.music-bar{
-  position:fixed;
-  top:20px;
-  left:50%;
-  transform:translateX(-50%);
-  backdrop-filter:blur(20px);
-  background:rgba(255,255,255,0.25);
-  padding:12px 25px;
-  border-radius:40px;
-  box-shadow:0 8px 30px rgba(0,0,0,0.15);
-  display:flex;
-  align-items:center;
-  gap:15px;
-  z-index:999;
-}
+    /* ---------- PAGE 1: VALENTINE ASK ---------- */
+    #p1 .ask-buttons {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 24px;
+      position: relative;
+      min-height: 120px;
+    }
+    #p1 .ask-buttons button {
+      padding: 18px 48px;
+      border-radius: 50px;
+      font-size: 20px;
+      font-family: 'Playfair Display', serif;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.3s;
+      position: relative;
+    }
+    #p1 .yes-btn {
+      background: linear-gradient(145deg, #e91e63, #c71585);
+      color: white;
+      border: none;
+      box-shadow: 0 12px 35px rgba(233, 30, 99, 0.4);
+    }
+    #p1 .yes-btn:hover {
+      transform: scale(1.08);
+      box-shadow: 0 18px 45px rgba(233, 30, 99, 0.5);
+    }
+    #p1 .no-btn {
+      background: linear-gradient(145deg, #b0b0b0, #888);
+      color: white;
+      border: none;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      position: relative;
+      transition: left 0.15s ease, top 0.15s ease;
+    }
+    #p1 .no-btn.runaway {
+      position: fixed;
+    }
+    #p1 .no-btn:hover { cursor: crosshair; }
 
-.music-bar button{
-  background:none;
-  border:none;
-  font-size:18px;
-  cursor:pointer;
-}
+    /* ---------- PAGE 2: SIGN ---------- */
+    #p2 .sign-area {
+      background: rgba(255,255,255,0.9);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: var(--shadow-strong);
+      margin: 20px 0;
+    }
+    #p2 canvas {
+      display: block;
+      border-radius: 12px;
+      border: 2px solid #ffb6c1;
+      cursor: crosshair;
+    }
+    #p2 .confirm-btn {
+      margin-top: 16px;
+      padding: 14px 36px;
+      background: linear-gradient(145deg, #ff8fab, #db7093);
+      color: white;
+      border: none;
+      border-radius: 40px;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: var(--shadow-soft);
+    }
 
-.music-bar span{
-  font-size:14px;
-  font-weight:500;
-}
+    /* ---------- PAGE 3: WORDLE ---------- */
+    .wordle-section { text-align: center; }
+    .wordle-section h2 { margin-bottom: 8px; }
+    .wordle-hint-box {
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(10px);
+      padding: 12px 24px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      cursor: pointer;
+      border: 2px dashed #db7093;
+      font-size: 18px;
+      color: #5a3e4d;
+      box-shadow: var(--shadow-soft);
+    }
+    .wordle-hint-box.revealed { border-style: solid; }
+    .wordle .grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      max-width: 280px;
+      margin: 0 auto 20px;
+    }
+    .wordle .tile {
+      width: 52px;
+      height: 52px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: bold;
+      background: rgba(255,255,255,0.9);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .wordle .tile.correct { background: #2e7d32; color: white; border-color: #2e7d32; }
+    .wordle .tile.present { background: #f9a825; color: white; border-color: #f9a825; }
+    .wordle .tile.wrong { background: #757575; color: white; border-color: #757575; }
+    .wordle input {
+      padding: 12px 16px;
+      font-size: 18px;
+      width: 200px;
+      text-align: center;
+      border-radius: 12px;
+      border: 2px solid #ffb6c1;
+      margin-right: 10px;
+    }
+    .wordle .guess-btn {
+      padding: 12px 24px;
+      border-radius: 12px;
+      background: linear-gradient(145deg, #ff8fab, #db7093);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
 
-/* ---------- FIRST PAGE ---------- */
+    /* ---------- PAGE 4: CONNECTIONS ---------- */
+    .connections-section { text-align: center; }
+    .connections-section h2 { margin-bottom: 8px; }
+    .connections-instruction { margin-bottom: 20px; font-size: 18px; }
+    .connections-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      max-width: 520px;
+      margin: 0 auto 24px;
+    }
+    .conn-tile {
+      padding: 16px;
+      text-align: center;
+      border-radius: 12px;
+      border: 2px solid #ffb6c1;
+      background: rgba(255,255,255,0.9);
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 500;
+      box-shadow: var(--shadow-soft);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .conn-tile:hover { transform: translateY(-2px); box-shadow: var(--shadow-strong); }
+    .conn-tile.selected { background: #ffe4ec; border-color: #db7093; box-shadow: inset 0 0 0 2px #db7093; }
+    .conn-tile.correct { background: #2e7d32; color: white; border-color: #2e7d32; cursor: default; }
+    .conn-tile.wrong { animation: shake 0.4s ease; }
+    @keyframes shake {
+      0%,100%{transform:translateX(0);}
+      25%{transform:translateX(-8px);}
+      75%{transform:translateX(8px);}
+    }
+    .connections-actions { margin-top: 16px; display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
+    .connections-actions button {
+      padding: 12px 28px;
+      border-radius: 30px;
+      background: linear-gradient(145deg, #ff8fab, #db7093);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 0 6px;
+    }
+    .connections-success {
+      font-size: 22px;
+      color: #c71585;
+      font-weight: bold;
+      margin-top: 20px;
+      display: none;
+      text-align: center;
+    }
 
-.hero{
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-}
+    /* ---------- PAGE 3: GAMES PAGE (scrollable) ---------- */
+    #p3.games-page {
+      justify-content: flex-start;
+      overflow-y: auto;
+      padding-top: 100px;
+    }
+    #p3 .games-inner {
+      width: 100%;
+      max-width: 560px;
+      margin: 0 auto 60px;
+    }
+    #p3 .connections-section { margin-top: 80px; padding-top: 48px; border-top: 2px dashed #ffb6c1; }
 
-.hero h1{
-  font-size:52px;
-  margin-bottom:20px;
-}
+    /* ---------- PAGE 4: QUIZ ---------- */
+    .quiz-section { text-align: center; max-width: 560px; margin: 0 auto; }
+    .quiz-section h1 { margin-bottom: 8px; }
+    .quiz-section .quiz-subtitle {
+      font-size: 17px;
+      line-height: 1.5;
+      color: #5a3e4d;
+      margin-bottom: 28px;
+    }
+    .quiz-scroll {
+      max-height: 55vh;
+      overflow-y: auto;
+      text-align: left;
+      padding: 0 8px 20px;
+    }
+    .quiz-question {
+      background: rgba(255,255,255,0.9);
+      border-radius: 16px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      border: 2px solid #ffd6e0;
+      box-shadow: var(--shadow-soft);
+    }
+    .quiz-question h3 { margin: 0 0 14px 0; font-size: 18px; color: #c71585; }
+    .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+    .quiz-options label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 2px solid #ffe4ec;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .quiz-options label:hover { background: rgba(255, 182, 193, 0.2); border-color: #ffb6c1; }
+    .quiz-options input { accent-color: #db7093; }
+    .quiz-submit-wrap { margin-top: 24px; }
+    .quiz-submit-wrap button {
+      padding: 16px 40px;
+      border-radius: 30px;
+      background: linear-gradient(145deg, #ff8fab, #db7093);
+      color: white;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: var(--shadow-soft);
+    }
+    .quiz-result {
+      display: none;
+      margin-top: 40px;
+      padding: 24px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 20px;
+      border: 2px solid #ffb6c1;
+      font-size: 22px;
+      color: #c71585;
+      font-weight: bold;
+    }
 
-.question{
-  font-size:32px;
-  margin:20px 0 40px;
-}
+    /* ---------- PAGE 5: REASONS ---------- */
+    .reasons-section { text-align: center; }
+    .reasons-section .reason-display {
+      min-height: 120px;
+      max-width: 500px;
+      margin: 24px auto;
+      padding: 32px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 24px;
+      box-shadow: var(--shadow-strong);
+      font-size: 22px;
+      text-align: center;
+      font-style: italic;
+      color: #5a3e4d;
+      border: 3px solid #ffb6c1;
+    }
+    .reasons-section .reason-btn {
+      padding: 18px 40px;
+      border-radius: 50px;
+      background: linear-gradient(145deg, #ff8fab, #db7093);
+      color: white;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: var(--shadow-soft);
+    }
 
-.btns{
-  display:flex;
-  gap:120px;
-}
+    /* ---------- PAGE 6: TIMELINE ---------- */
+    .timeline-section {
+      width: 100%;
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .timeline-section > h1 { margin-bottom: 8px; }
+    .timeline-scroll {
+      max-height: 65vh;
+      overflow-y: auto;
+      padding: 20px;
+    }
+    .timeline-item {
+      background: rgba(255,255,255,0.85);
+      border-radius: 16px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-soft);
+      border: 2px solid #ffd6e0;
+      position: relative;
+    }
+    .timeline-item::before {
+      content: '♥';
+      position: absolute;
+      left: -8px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 20px;
+      color: #db7093;
+    }
+    .timeline-item h3 { margin: 0 0 8px 0; font-size: 20px; color: #c71585; }
+    .timeline-item .caption-toggle {
+      cursor: pointer;
+      font-size: 14px;
+      color: #db7093;
+      margin-top: 8px;
+    }
+    .timeline-item .caption-text {
+      display: none;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed #ffb6c1;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    .timeline-item.expanded .caption-text { display: block; }
 
-button.primary{
-  padding:15px 40px;
-  font-size:20px;
-  border:none;
-  border-radius:40px;
-  cursor:pointer;
-  transition:0.3s;
-  box-shadow:0 10px 25px rgba(0,0,0,0.2);
-}
+    /* ---------- PAGE 7: FUTURE ---------- */
+    .future-section { text-align: center; }
+    .future-section .vision-board {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: center;
+      gap: 20px;
+      max-width: 900px;
+      margin: 24px auto;
+      position: relative;
+    }
+    .vision-item {
+      width: 140px;
+      height: 140px;
+      flex-shrink: 0;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.9);
+      box-shadow: var(--shadow-strong);
+      border: 3px solid #ffb6c1;
+      transform: rotate(var(--r, 0deg));
+      position: relative;
+      overflow: hidden;
+    }
+    .vision-item img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .vision-item .vision-label {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 10px 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      color: white;
+      background: linear-gradient(to top, rgba(0,0,0,0.75), rgba(0,0,0,0.4));
+      text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+    }
+    /* If no image, show text centered (fallback) */
+    .vision-item:not(:has(img)) .vision-label,
+    .vision-item .vision-label:only-child {
+      inset: 0;
+      bottom: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      color: #5a3e4d;
+      text-shadow: none;
+    }
+    .vision-item:nth-child(1){--r:-4deg;}
+    .vision-item:nth-child(2){--r:3deg;}
+    .vision-item:nth-child(3){--r:-2deg;}
+    .vision-item:nth-child(4){--r:5deg;}
+    .vision-item:nth-child(5){--r:2deg;}
+    .coming-soon {
+      margin-top: 40px;
+      padding: 24px;
+      background: rgba(255,255,255,0.8);
+      border-radius: 20px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: var(--shadow-soft);
+    }
+    .coming-soon h3 { color: #c71585; margin-bottom: 20px; }
+    .countdown-item {
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px dashed #ffb6c1;
+      text-align: center;
+    }
+    .countdown-item:last-child { border-bottom: none; }
+    .countdown-item strong { display: block; margin-bottom: 4px; }
+    .countdown-value { font-size: 24px; color: #db7093; }
 
-.yes{
-  background:linear-gradient(45deg,#ff8fb1,#ff5fa2);
-  color:white;
-}
-
-.no{
-  background:linear-gradient(45deg,#ccc,#999);
-  color:white;
-}
-
-button.primary:hover{
-  transform:translateY(-5px);
-}
-
-/* ---------- ENVELOPE ---------- */
-
-.envelope-wrapper{
-  perspective:1000px;
-  margin-top:40px;
-}
-
-.envelope{
-  width:320px;
-  height:200px;
-  margin:auto;
-  position:relative;
-  transform-style:preserve-3d;
-}
-
-.flap{
-  width:100%;
-  height:100%;
-  background:#ff8fb1;
-  clip-path:polygon(0 0,100% 0,50% 70%);
-  position:absolute;
-  top:0;
-  left:0;
-  transition:0.8s;
-  cursor:pointer;
-  transform-origin:top;
-  box-shadow:0 10px 25px rgba(0,0,0,0.3);
-}
-
-.envelope.open .flap{
-  transform:rotateX(180deg);
-}
-
-.paper{
-  position:absolute;
-  bottom:0;
-  width:100%;
-  height:100%;
-  background:white;
-  transform:translateY(100%);
-  transition:0.8s;
-  box-shadow:0 20px 40px rgba(0,0,0,0.3);
-}
-
-.envelope.open .paper{
-  transform:translateY(0);
-}
-
-.overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.6);
-  display:none;
-  align-items:center;
-  justify-content:center;
-}
-
-.overlay.active{
-  display:flex;
-}
-
-.letter{
-  background:#fffdf9;
-  width:70%;
-  max-width:700px;
-  padding:60px;
-  border-radius:20px;
-  box-shadow:0 30px 60px rgba(0,0,0,0.4);
-  animation:fadeUp 0.6s ease;
-}
-
-@keyframes fadeUp{
-  from{transform:translateY(40px); opacity:0;}
-  to{transform:translateY(0); opacity:1;}
-}
-
-/* ---------- REASONS ---------- */
-
-.reasons{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:30px;
-  margin-top:50px;
-}
-
-.reason{
-  perspective:1000px;
-}
-
-.card{
-  position:relative;
-  width:100%;
-  height:150px;
-  transform-style:preserve-3d;
-  transition:0.6s;
-  cursor:pointer;
-}
-
-.card.flip{
-  transform:rotateY(180deg);
-}
-
-.card div{
-  position:absolute;
-  inset:0;
-  backface-visibility:hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:15px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.2);
-  padding:15px;
-}
-
-.front{
-  background:linear-gradient(45deg,#ffb6c1,#ffd1dc);
-}
-
-.back{
-  background:white;
-  transform:rotateY(180deg);
-}
-
-/* ---------- WORDLE ---------- */
-
-.wordle{
-  margin-top:60px;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(5,60px);
-  gap:10px;
-  justify-content:center;
-  margin-top:20px;
-}
-
-.tile{
-  width:60px;
-  height:60px;
-  background:white;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:24px;
-  font-weight:bold;
-  border-radius:10px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.2);
-}
-
-.correct{background:#6aaa64;color:white;}
-.present{background:#c9b458;color:white;}
-.wrong{background:#787c7e;color:white;}
-
-input{
-  margin-top:20px;
-  padding:10px;
-  font-size:16px;
-  border-radius:10px;
-  border:none;
-}
-
-</style>
+    /* ---------- PAGE 8: LETTER ---------- */
+    .letter-section { perspective: 1000px; text-align: center; }
+    .envelope-wrap {
+      position: relative;
+      width: 320px;
+      height: 220px;
+      cursor: pointer;
+    }
+    .envelope-base {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 320px;
+      height: 160px;
+      background: linear-gradient(145deg, #f8e0e8, #f0c8d4);
+      border-radius: 0 0 8px 8px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 320px;
+      height: 160px;
+      background: linear-gradient(145deg, #ffd6e0, #f8c4d4);
+      transform-origin: top center;
+      transition: transform 0.6s ease;
+      box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+      clip-path: polygon(0 0, 50% 100%, 100% 0);
+    }
+    .envelope-wrap.open .envelope-flap { transform: rotateX(-180deg); }
+    .letter-paper {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 280px;
+      max-height: 0;
+      overflow: hidden;
+      background: #fffef9;
+      border-radius: 8px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      transition: max-height 0.6s ease 0.2s;
+      cursor: default;
+    }
+    .envelope-wrap.open .letter-paper { max-height: 70vh; overflow-y: auto; }
+    .letter-paper .letter-content {
+      padding: 32px 24px 80px;
+      font-size: 17px;
+      line-height: 1.7;
+      color: #333;
+    }
+    .letter-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      background: transparent;
+    }
+    .letter-backdrop.show { display: block; }
+    .letter-paper.fullscreen {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      max-width: none !important;
+      max-height: none !important;
+      min-height: 100vh !important;
+      transform: none !important;
+      border-radius: 0;
+      z-index: 501;
+      overflow-y: scroll !important;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
+    .letter-paper.fullscreen .letter-content {
+      padding: 40px 28px 120px;
+      max-width: 680px;
+      margin: 0 auto;
+      min-height: auto;
+    }
+    .letter-close-btn {
+      display: none;
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      padding: 10px 20px;
+      border-radius: 24px;
+      background: linear-gradient(145deg, #ff8fab, #db7093);
+      color: white;
+      border: none;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(199, 21, 133, 0.3);
+      z-index: 10;
+    }
+    .letter-paper.fullscreen .letter-close-btn {
+      display: block;
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="music-bar">
-  <button onclick="prevSong()">⏮</button>
-  <button onclick="togglePlay()">⏯</button>
-  <button onclick="nextSong()">⏭</button>
-  <span id="songInfo">Song 1 - 0:00</span>
-</div>
+  <div class="hearts-container" id="heartsContainer"></div>
 
-<audio id="player"></audio>
-<audio id="clickSound" src="click.mp3"></audio>
-
-<section class="hero">
-  <h1>Dear Atimaay,</h1>
-  <div class="question">Will you be my Valentine?</div>
-  <div class="btns">
-    <button class="primary yes" onclick="sayYes()">YES</button>
-    <button class="primary no" onclick="playClick(); alert('Try again. 😉')">NO</button>
+  <div class="music-bar" id="musicBar" style="display: none;">
+    <button id="playBtn" aria-label="Play/Pause">▶</button>
+    <span id="songTitle">—</span>
   </div>
-</section>
 
-<section id="letterSection" style="display:none;">
-  <h2>A Letter For You</h2>
-  <div class="envelope-wrapper">
-    <div class="envelope" id="envelope">
-      <div class="flap" onclick="openLetter()"></div>
-      <div class="paper"></div>
+  <audio id="player"></audio>
+
+  <button class="prevBtn" id="prevBtn" style="display: none;" onclick="goToPage(currentPage - 1)" aria-label="Previous page">➜</button>
+
+  <!-- PAGE 1 -->
+  <div class="page active" id="p1">
+    <h1>Dear Atimaay,</h1>
+    <h2>Will you be my valentine?</h2>
+    <div class="ask-buttons">
+      <button class="yes-btn" onclick="sayYes()">YES</button>
+      <button class="no-btn" id="noBtn">NO</button>
+    </div>
+    <button class="nextBtn" id="nextP1" style="display:none;" onclick="goToPage(2)">➜</button>
+  </div>
+
+  <!-- PAGE 2 -->
+  <div class="page" id="p2">
+    <h1>Sign to be mine forever</h1>
+    <div class="sign-area">
+      <canvas id="signature" width="400" height="200"></canvas>
+    </div>
+    <button class="confirm-btn" onclick="celebrate()">Confirm</button>
+    <button class="nextBtn" onclick="goToPage(3)">➜</button>
+  </div>
+
+  <!-- PAGE 3 WORDLE + CONNECTIONS (games) -->
+  <div class="page games-page" id="p3">
+    <div class="games-inner">
+      <section class="wordle-section">
+        <h2>Wordle</h2>
+        <div class="wordle-hint-box" id="wordleHintBox" onclick="revealHint()">HINT</div>
+        <div class="wordle">
+          <div class="grid" id="wordleGrid"></div>
+          <input id="guessInput" maxlength="5" placeholder="5 letter word">
+          <button class="guess-btn" onclick="submitGuess()">Guess</button>
+        </div>
+      </section>
+      <section class="connections-section">
+        <h2>Connections</h2>
+        <p class="connections-instruction">Group 4 words that belong together. Select 4 tiles and click Submit.</p>
+        <div class="connections-grid" id="connectionsGrid"></div>
+        <div class="connections-actions">
+          <button onclick="connDeselect()">Deselect</button>
+          <button onclick="connSubmit()">Submit</button>
+        </div>
+        <p class="connections-success" id="connSuccess">Yay! Good job baby! 🤍</p>
+      </section>
+    </div>
+    <button class="nextBtn" onclick="goToPage(4)">➜</button>
+  </div>
+
+  <!-- PAGE 4 QUIZ -->
+  <div class="page" id="p4">
+    <section class="quiz-section">
+      <h1>Quiz</h1>
+      <p class="quiz-subtitle">Each question you get correct, you'll get whatever you request and I can't say no. (free to use whenever! ;)</p>
+      <div class="quiz-scroll">
+        <div class="quiz-question">
+          <h3>1. On how many apps do we have a streak?</h3>
+          <div class="quiz-options">
+            <label><input type="radio" name="q1" value="0"> A: 4</label>
+            <label><input type="radio" name="q1" value="1"> B: 3</label>
+            <label><input type="radio" name="q1" value="2"> C: 2</label>
+            <label><input type="radio" name="q1" value="3"> D: 1</label>
+          </div>
+        </div>
+        <div class="quiz-question">
+          <h3>2. What score did we get on our first bowling game?</h3>
+          <div class="quiz-options">
+            <label><input type="radio" name="q2" value="0"> A: Kaimook - 103, Atimaay - 102</label>
+            <label><input type="radio" name="q2" value="1"> B: Kaimook - 105, Atimaay - 103</label>
+            <label><input type="radio" name="q2" value="2"> C: Kaimook - 100, Atimaay - 98</label>
+            <label><input type="radio" name="q2" value="3"> D: Kaimook - 101, Atimaay - 100</label>
+          </div>
+        </div>
+        <div class="quiz-question">
+          <h3>3. What was the date of when our first song was added to our playlist?</h3>
+          <div class="quiz-options">
+            <label><input type="radio" name="q3" value="0"> A: November 10th</label>
+            <label><input type="radio" name="q3" value="1"> B: November 8th</label>
+            <label><input type="radio" name="q3" value="2"> C: November 4th</label>
+            <label><input type="radio" name="q3" value="3"> D: November 6th</label>
+          </div>
+        </div>
+        <div class="quiz-question">
+          <h3>4. What is Kaimook's favourite Travis Scott song?</h3>
+          <div class="quiz-options">
+            <label><input type="radio" name="q4" value="0"> A: MAFIA</label>
+            <label><input type="radio" name="q4" value="1"> B: Drugs You Should Try It</label>
+            <label><input type="radio" name="q4" value="2"> C: Hell Of A Night</label>
+            <label><input type="radio" name="q4" value="3"> D: ASTROTHUNDER</label>
+          </div>
+        </div>
+        <div class="quiz-question">
+          <h3>5. When was our first call?</h3>
+          <div class="quiz-options">
+            <label><input type="radio" name="q5" value="0"> A: August 22nd</label>
+            <label><input type="radio" name="q5" value="1"> B: August 18th</label>
+            <label><input type="radio" name="q5" value="2"> C: August 19th</label>
+            <label><input type="radio" name="q5" value="3"> D: August 20th</label>
+          </div>
+        </div>
+        <div class="quiz-question">
+          <h3>6. Who is the GOAT?</h3>
+          <div class="quiz-options">
+            <label><input type="radio" name="q6" value="0"> A: Kaimook</label>
+            <label><input type="radio" name="q6" value="1"> B: Kaimook</label>
+            <label><input type="radio" name="q6" value="2"> C: Kaimook</label>
+            <label><input type="radio" name="q6" value="3"> D: Atimaay</label>
+          </div>
+        </div>
+        <div class="quiz-question">
+          <h3>7. What was the first game we played together?</h3>
+          <div class="quiz-options">
+            <label><input type="radio" name="q7" value="0"> A: 99 Nights In The Forest</label>
+            <label><input type="radio" name="q7" value="1"> B: 8Ball</label>
+            <label><input type="radio" name="q7" value="2"> C: Dog Walk [Two Player Obby]</label>
+            <label><input type="radio" name="q7" value="3"> D: Blade Ball</label>
+          </div>
+        </div>
+        <div class="quiz-question">
+          <h3>8. What rank did Kaimook peak in Valorant?</h3>
+          <div class="quiz-options">
+            <label><input type="radio" name="q8" value="0"> A: Plat 3</label>
+            <label><input type="radio" name="q8" value="1"> B: Gold 2</label>
+            <label><input type="radio" name="q8" value="2"> C: Immortal 1</label>
+            <label><input type="radio" name="q8" value="3"> D: Diamond 2</label>
+          </div>
+        </div>
+        <div class="quiz-question">
+          <h3>9. Who is Kaimook's best friend?</h3>
+          <div class="quiz-options">
+            <label><input type="radio" name="q9" value="0"> A: Aurora</label>
+            <label><input type="radio" name="q9" value="1"> B: Michele</label>
+            <label><input type="radio" name="q9" value="2"> C: Sahana</label>
+            <label><input type="radio" name="q9" value="3"> D: Ayana</label>
+          </div>
+        </div>
+        <div class="quiz-question">
+          <h3>10. How many days left until we see each other?</h3>
+          <div class="quiz-options">
+            <label><input type="radio" name="q10" value="0"> A: 35</label>
+            <label><input type="radio" name="q10" value="1"> B: 37</label>
+            <label><input type="radio" name="q10" value="2"> C: 32</label>
+            <label><input type="radio" name="q10" value="3"> D: 31</label>
+          </div>
+        </div>
+      </div>
+      <div class="quiz-submit-wrap">
+        <button type="button" class="quiz-submit-btn" onclick="submitQuiz()">Submit</button>
+      </div>
+      <div class="quiz-result" id="quizResult"></div>
+    </section>
+    <button class="nextBtn" onclick="goToPage(5)">➜</button>
+  </div>
+
+  <!-- PAGE 5 REASONS -->
+  <div class="page" id="p5">
+    <section class="reasons-section">
+      <h1>Reasons I love you</h1>
+      <div class="reason-display" id="reasonDisplay">Click the button for a reason 💕</div>
+      <button class="reason-btn" onclick="showReason()">Click for a reason</button>
+    </section>
+    <button class="nextBtn" onclick="goToPage(6)">➜</button>
+  </div>
+
+  <!-- PAGE 6 TIMELINE -->
+  <div class="page" id="p6">
+    <section class="timeline-section">
+      <h1>Our timeline</h1>
+      <div class="timeline-scroll">
+        <div class="timeline-item">
+          <h3>Meeting Online</h3>
+          <span class="caption-toggle" onclick="toggleCaption(this)">Click me</span>
+          <div class="caption-text">The first time I knew of you was when you snapped me while you were in your trip to Japan in december, which I said 'okay face card' to. I remembering stalking your location and seeing you were so close to me at TAC! I really wish we would've met then, it'd be over a year for us now! But thats ok, I'm still so happy I got to meet you eventually.</div>
+        </div>
+        <div class="timeline-item">
+          <h3>First Conversation</h3>
+          <span class="caption-toggle" onclick="toggleCaption(this)">Click me</span>
+          <div class="caption-text">The first conversation I remember us having was when you slide up on my story of Justin and I wearing soccer jerseys and you asked me if I lived in 3 different places which irritated me so much haha. I wish we would've talked more then, and continued our conversation from there on. If I knew you like I do now, I would've never let a gem like you go.</div>
+        </div>
+        <div class="timeline-item">
+          <h3>Meeting In Real Life</h3>
+          <span class="caption-toggle" onclick="toggleCaption(this)">Click me</span>
+          <div class="caption-text">I was late to picking you up from the airport.. I am so sorry baby. But you were still so kind and patient to me and that first hug we had was the best hug I've ever had in my life. I loved the way you smelt and how you held me. You are the most handsome boy in the whole entire universe and I was just stunned when I saw you. I love looking at your cute face so so so much my love, and I love kissing it even more.</div>
+        </div>
+        <div class="timeline-item">
+          <h3>First Day Together</h3>
+          <span class="caption-toggle" onclick="toggleCaption(this)">Click me</span>
+          <div class="caption-text">We kissed and cuddled so much on the bus back to our hotel. I loved it! Although I hate PDA, doing it with you is worth it. We were so tired and you slept like a baby! I was so overjoyed but also calm at the same time because you make me feel so safe but also like wow! look at you baby. I hope you enjoyed the McDonalds I got you :P </div>
+        </div>
+        <div class="timeline-item">
+          <h3>First Date</h3>
+          <span class="caption-toggle" onclick="toggleCaption(this)">Click me</span>
+          <div class="caption-text">Our official first date was at Disney land. We only want on four rides and ate lots but it was so fun to just hold your hand and be there by your side. I learned how you didn't like waiting, and how much food you waste, but I also learned how caring you were by cautioning my to not wear shoes that would hurt my feet and giving me your thermals to keep me warm. I also learned that you stuck by your words and made our plan come true, because I really wanted to go to Disney with my baby.</div>
+        </div>
+        <div class="timeline-item">
+          <h3>First Sleep</h3>
+          <span class="caption-toggle" onclick="toggleCaption(this)">Click me</span>
+          <div class="caption-text">I remember giving you back scratches each night before we sleep and you giving me a massage. It felt so so so good! I loved laying by your side, and sometimes you would cuddle me, which was the best thing ever. I loved holding you, I loved babying you, I loved loving on you. Gosh, writing this is making me cry, I miss you so much.</div>
+        </div>
+        <div class="timeline-item">
+          <h3>First School Day</h3>
+          <span class="caption-toggle" onclick="toggleCaption(this)">Click me</span>
+          <div class="caption-text">First day we had math, physics, and then supa cnf and I remember you getting glazed by Nathan Swaine so hard lol. I have never enjoyed school so much as I did with these two days with you. You made class so fun and I actually locked in a little bit because you were there (even though you think I was so locked out). I am so grateful you went to plain, boring, school with me because it made me realise how much you value our time together. And knowing from that experience, if we can go through one of the worst things together like school, we can go through so much more in life and it will be just fine as long as we have each other. </div>
+        </div>
+        <div class="timeline-item">
+          <h3>Our last day</h3>
+          <span class="caption-toggle" onclick="toggleCaption(this)">Click me</span>
+          <div class="caption-text">Oh no! We are rushing because you almost missed your flight.. 8 minutes to spare… phew! Lets leave earlier next time! Today was the saddest day in my life. But you made it better by face timing me as soon as you could! Spending the past week with you was the best week in my whole entire life and I didn't know what to do without you by my side, and I still don't. I miss you so much baby. </div>
+        </div>
+        <div class="timeline-item">
+          <h3>And more to come</h3>
+          <span class="caption-toggle" onclick="toggleCaption(this)">Click me</span>
+          <div class="caption-text">So many more memories to make with you. I'm so looking forward to our bright future ahead together. I love you.  🤍</div>
+        </div>
+      </div>
+    </section>
+    <button class="nextBtn" onclick="goToPage(7)">➜</button>
+  </div>
+
+  <!-- PAGE 7 FUTURE -->
+  <div class="page" id="p7">
+    <section class="future-section">
+      <h1>Our future</h1>
+      <div class="vision-board">
+        <div class="vision-item" data-slide-prefix="dream_house" data-slide-count="3">
+          <img src="assets/dream_house_1.jpg" alt="">
+          <span class="vision-label">Dream house</span>
+        </div>
+        <div class="vision-item" data-slide-prefix="dream_location" data-slide-count="3">
+          <img src="assets/dream_location_1.jpg" alt="">
+          <span class="vision-label">Dream location</span>
+        </div>
+        <div class="vision-item" data-slide-prefix="dream_car" data-slide-count="3">
+          <img src="assets/dream_car_1.jpg" alt="">
+          <span class="vision-label">Dream cars</span>
+        </div>
+        <div class="vision-item" data-slide-prefix="kids" data-slide-count="3">
+          <img src="assets/kids_1.jpg" alt="">
+          <span class="vision-label">Atimook + Kaimaay</span>
+        </div>
+        <div class="vision-item" data-slide-prefix="marriage" data-slide-count="3">
+          <img src="assets/marriage_1.jpg" alt="">
+          <span class="vision-label">Marriage</span>
+        </div>
+      </div>
+      <div class="coming-soon">
+        <h3>Coming Soon…</h3>
+        <div class="countdown-item">
+          <strong>Next Visit</strong>
+          <div class="countdown-value" id="countdown1">—</div>
+        </div>
+        <div class="countdown-item">
+          <strong>Living In The Same City: Boston</strong>
+          <div class="countdown-value" id="countdown2">—</div>
+        </div>
+        <div class="countdown-item">
+          <strong>Marriage</strong>
+          <div class="countdown-value" id="countdown3">—</div>
+        </div>
+      </div>
+    </section>
+    <button class="nextBtn" onclick="goToPage(8)">➜</button>
+  </div>
+
+  <!-- PAGE 8 LETTER -->
+  <div class="page" id="p8">
+    <section class="letter-section">
+      <h1>A letter for you</h1>
+      <div class="envelope-wrap" id="envelopeWrap">
+        <div class="envelope-base"></div>
+        <div class="envelope-flap"></div>
+        <div class="letter-paper" id="letterPaper">
+          <button type="button" class="letter-close-btn" id="letterCloseBtn" onclick="closeLetter()">Close</button>
+          <div class="letter-content">
+            <!-- Replace the text below with your own letter -->
+            My dearest Atimaay,<br><br>
+            I wanted to put into words how much you mean to me. You have my heart, and every day with you feels like a gift. I can't wait for all our tomorrows together. I am so lucky to have to as my valentine from now on and forever. You are the best thing that has ever happened to me and I love you more than words can say. I know we are so so so far apart right now :< , but soon enough we won't be apart for more than a week at a time ever again! And I know things are so so so hard because of the distance, but I want to remind you how strong you are for pushing through this and trying so hard to make US work. Truly, you were what I needed in life. I don't know how I got so lucky to have you, but nevertheless, I am in awe everyday with how much of an awesome baby I have (those pancakes also put me in an awe too - though a different type of awe..hehe). You know, I was never looking for love. But meeting you has made me realise my life would not be complete without you. Deep down in my heart, I always knew there was something special between you and I. I know we clash sometimes, and we fight more than we would like, but I wouldn't want to trade what we have with each other with anything or anyone else. I know we say hurtful things to each other sometimes, and I'd like to believe we don't truly mean those things. I've never smiled at my phone so much before I met you. I never imagined I could like someone so much without even meeting them, and when I met you I fell for you even harder. Baby, you are the best thing that has ever came into my life and I am so so so happy that you're here with me. I love loving you and I love how you love me. I see it from your big gestures of coming all the way to Japan to see me to your 'smaller' ones such as responding to my reposts or reposting cute tiktoks about me (are we parasocial? hahah jk). I could write about you forever baby. And I really wish we could've spent this valentines together, but it's okay! Let's make up for it in March? I love you so much baby.  <br><br>
+            Forever yours,<br>
+            Kaimook 🤍
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="letter-backdrop" id="letterBackdrop"></div>
+    <button class="nextBtn" style="display:none;">➜</button>
+  </div>
+
+  <!-- Popup: signature confirmed -->
+  <div class="popup-overlay" id="signaturePopup">
+    <div class="popup-box">
+      <p>Okay..!! You signed it — we are gonna be locked in forever! It's in print ;)</p>
+      <button class="popup-ok" onclick="closeSignaturePopup()">OK</button>
     </div>
   </div>
-</section>
-
-<div class="overlay" id="overlay" onclick="closeLetter(event)">
-  <div class="letter">
-    <h2>My Love,</h2>
-    <p>
-      We have grown, learned, healed, and chosen each other again and again.
-      I am proud of us. I am proud of you.
-      I don’t just love you.
-      I choose you.
-      Every time.
-    </p>
+  <!-- Popup: connection category revealed -->
+  <div class="popup-overlay" id="categoryPopup">
+    <div class="popup-box">
+      <p id="categoryPopupText"></p>
+      <button class="popup-ok" onclick="closeCategoryPopup()">OK</button>
+    </div>
   </div>
-</div>
-
-<section>
-  <h2>10 Reasons I Love You</h2>
-  <div class="reasons">
-    <div class="reason"><div class="card" onclick="flip(this)"><div class="front">1</div><div class="back">Your laugh</div></div></div>
-    <div class="reason"><div class="card" onclick="flip(this)"><div class="front">2</div><div class="back">Your kindness</div></div></div>
-    <div class="reason"><div class="card" onclick="flip(this)"><div class="front">3</div><div class="back">Your mind</div></div></div>
-    <div class="reason"><div class="card" onclick="flip(this)"><div class="front">4</div><div class="back">Your ambition</div></div></div>
-    <div class="reason"><div class="card" onclick="flip(this)"><div class="front">5</div><div class="back">You choose me</div></div></div>
+  <!-- Popup: Wordle correct -->
+  <div class="popup-overlay" id="wordlePopup">
+    <div class="popup-box">
+      <p>You got it! You have my heart 🤍</p>
+      <button class="popup-ok" onclick="closeWordlePopup()">OK</button>
+    </div>
   </div>
-</section>
 
-<section>
-  <h2>Couple Wordle</h2>
-  <div class="wordle">
-    <div class="grid" id="grid"></div>
-    <input id="guessInput" maxlength="5" placeholder="5 letter word">
-    <button onclick="submitGuess()">Guess</button>
-  </div>
-</section>
+  <script>
+    (function() {
+      // ---------- FLOATING HEARTS ----------
+      const heartsContainer = document.getElementById('heartsContainer');
+      const hearts = ['♥', '💕', '💗', '🤍', '❤️'];
+      for (let i = 0; i < 25; i++) {
+        const h = document.createElement('div');
+        h.className = 'heart-float';
+        h.textContent = hearts[i % hearts.length];
+        h.style.left = Math.random() * 100 + '%';
+        h.style.animationDelay = (Math.random() * 8) + 's';
+        heartsContainer.appendChild(h);
+      }
+    })();
 
-<script>
+    // ---------- SOUND EFFECTS ----------
+    function playClick() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.connect(g);
+        g.connect(ctx.destination);
+        o.frequency.value = 800;
+        o.type = 'sine';
+        g.gain.setValueAtTime(0.15, ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+        o.start(ctx.currentTime);
+        o.stop(ctx.currentTime + 0.1);
+      } catch (_) {}
+    }
+    function playWin() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const notes = [523, 659, 784, 1047];
+        notes.forEach((freq, i) => {
+          const o = ctx.createOscillator();
+          const g = ctx.createGain();
+          o.connect(g);
+          g.connect(ctx.destination);
+          o.frequency.value = freq;
+          o.type = 'sine';
+          g.gain.setValueAtTime(0.12, ctx.currentTime);
+          g.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+          o.start(ctx.currentTime + i * 0.12);
+          o.stop(ctx.currentTime + i * 0.12 + 0.2);
+        });
+      } catch (_) {}
+    }
 
-const songs=["until_i_found_you.mp3","so_easy.mp3","sparks.mp3", "stand_by_me.mp3", "we_belong_together.mp3", "cant_take_my_eyes_off_you.mp3", "every_breath_you_take.mp3", "i_love_you_so.mp3"];
-let current=0;
-const player=document.getElementById("player");
-player.src=songs[0];
+    // ---------- PAGE NAVIGATION ----------
+    let currentPage = 1;
+    const player = document.getElementById('player');
+    const musicBar = document.getElementById('musicBar');
+    const songTitle = document.getElementById('songTitle');
+    const playBtn = document.getElementById('playBtn');
 
-function togglePlay(){
-  playClick();
-  if(player.paused) player.play();
-  else player.pause();
-}
+    const songs = {
+      2: { src: 'assets/so_easy.mp3', name: 'So Easy To Fall In Love' },
+      3: { src: 'assets/sparks.mp3', name: 'Sparks' },
+      4: { src: 'assets/stand_by_me.mp3', name: 'Stand By Me' },
+      5: { src: 'assets/i_love_you_so.mp3', name: 'I Love You So' },
+      6: { src: 'assets/every_breath_you_take.mp3', name: 'Every Breath You Take' },
+      7: { src: 'assets/we_belong_together.mp3', name: 'We Belong Together' },
+      8: { src: 'assets/until_i_found_you.mp3', name: 'Until I Found You' }
+    };
 
-function nextSong(){
-  playClick();
-  current=(current+1)%songs.length;
-  player.src=songs[current];
-  player.play();
-}
+    const prevBtn = document.getElementById('prevBtn');
+    function goToPage(num) {
+      playClick();
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      currentPage = num;
+      document.getElementById('p' + num).classList.add('active');
+      prevBtn.style.display = num > 1 ? 'block' : 'none';
+      if (songs[num]) {
+        musicBar.style.display = 'flex';
+        player.src = songs[num].src;
+        songTitle.textContent = songs[num].name;
+        player.play().catch(() => {});
+      } else {
+        musicBar.style.display = 'none';
+      }
+      if (num === 7) updateCountdowns();
+    }
 
-function prevSong(){
-  playClick();
-  current=(current-1+songs.length)%songs.length;
-  player.src=songs[current];
-  player.play();
-}
+    playBtn.onclick = function() {
+      playClick();
+      if (player.paused) player.play();
+      else player.pause();
+    };
 
-player.addEventListener("timeupdate",()=>{
-  const min=Math.floor(player.currentTime/60);
-  const sec=Math.floor(player.currentTime%60).toString().padStart(2,'0');
-  document.getElementById("songInfo").innerText=`Song ${current+1} - ${min}:${sec}`;
-});
+    // ---------- PAGE 1: YES / NO ----------
+    const noBtn = document.getElementById('noBtn');
+    const askButtons = document.querySelector('#p1 .ask-buttons');
+    noBtn.addEventListener('mouseenter', function() {
+      noBtn.classList.add('runaway');
+      const yesBtn = document.querySelector('#p1 .yes-btn');
+      const yesRect = yesBtn.getBoundingClientRect();
+      const noRect = noBtn.getBoundingClientRect();
+      const padding = 30;
+      let x, y;
+      for (let attempt = 0; attempt < 50; attempt++) {
+        x = Math.random() * (window.innerWidth - noRect.width - 40) + 20;
+        y = Math.random() * (window.innerHeight - noRect.height - 40) + 20;
+        const noLeft = x, noRight = x + noRect.width, noTop = y, noBottom = y + noRect.height;
+        const yesLeft = yesRect.left - padding, yesRight = yesRect.right + padding, yesTop = yesRect.top - padding, yesBottom = yesRect.bottom + padding;
+        const overlaps = !(noRight < yesLeft || noLeft > yesRight || noBottom < yesTop || noTop > yesBottom);
+        if (!overlaps) break;
+      }
+      noBtn.style.left = x + 'px';
+      noBtn.style.top = y + 'px';
+    });
 
-function playClick(){
-  document.getElementById("clickSound").play();
-}
+    function sayYes() {
+      playClick();
+      playWin();
+      const confettiColors = ['#ff69b4', '#ff1493', '#db7093', '#ffb6c1', '#fff0f5'];
+      for (let i = 0; i < 80; i++) {
+        const c = document.createElement('div');
+        c.style.cssText = 'position:fixed;width:10px;height:10px;top:50%;left:50%;border-radius:50%;pointer-events:none;z-index:9999;';
+        c.style.background = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+        c.style.animation = 'fall 3s ease-out forwards';
+        document.body.appendChild(c);
+        const angle = (Math.PI * 2 * i) / 80 + Math.random();
+        const dist = 150 + Math.random() * 200;
+        const tx = Math.cos(angle) * dist;
+        const ty = Math.sin(angle) * dist - 100;
+        c.animate([
+          { transform: 'translate(-50%,-50%) scale(1)', opacity: 1 },
+          { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0)`, opacity: 0 }
+        ], { duration: 3000, fill: 'forwards' });
+        setTimeout(() => c.remove(), 3000);
+      }
+      document.getElementById('nextP1').style.display = 'block';
+    }
 
-function sayYes(){
-  playClick();
-  document.querySelector(".hero").style.display="none";
-  document.getElementById("letterSection").style.display="block";
-}
+    // Add fall keyframes if not in CSS
+    const style = document.createElement('style');
+    style.textContent = '@keyframes fall { to { transform: translateY(100vh); } }';
+    document.head.appendChild(style);
 
-function openLetter(){
-  playClick();
-  document.getElementById("envelope").classList.add("open");
-  setTimeout(()=>document.getElementById("overlay").classList.add("active"),600);
-}
+    // ---------- PAGE 2: SIGNATURE ----------
+    let drawing = false;
+    const canvas = document.getElementById('signature');
+    const ctx = canvas.getContext('2d');
+    ctx.strokeStyle = '#333';
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    canvas.addEventListener('mousedown', () => { drawing = true; playClick(); });
+    canvas.addEventListener('mouseup', () => drawing = false);
+    canvas.addEventListener('mousemove', e => {
+      if (!drawing) return;
+      const rect = canvas.getBoundingClientRect();
+      const x = (e.clientX - rect.left) * (canvas.width / rect.width);
+      const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+      ctx.lineTo(x, y);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+    });
+    canvas.addEventListener('mouseleave', () => drawing = false);
 
-function closeLetter(e){
-  if(!e.target.closest(".letter")){
-    document.getElementById("overlay").classList.remove("active");
-  }
-}
+    function celebrate() {
+      playClick();
+      playWin();
+      for (let i = 0; i < 60; i++) {
+        const c = document.createElement('div');
+        c.style.cssText = 'position:fixed;width:8px;height:8px;top:60%;left:50%;background:#ff69b4;border-radius:50%;pointer-events:none;z-index:9999;';
+        document.body.appendChild(c);
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 80 + Math.random() * 120;
+        c.animate([
+          { transform: 'translate(-50%,-50%) scale(1)', opacity: 1 },
+          { transform: `translate(calc(-50% + ${Math.cos(angle)*dist}px), calc(-50% + ${Math.sin(angle)*dist}px)) scale(0)`, opacity: 0 }
+        ], { duration: 2000, fill: 'forwards' });
+        setTimeout(() => c.remove(), 2000);
+      }
+      document.getElementById('signaturePopup').classList.add('show');
+    }
+    function closeSignaturePopup() {
+      playClick();
+      document.getElementById('signaturePopup').classList.remove('show');
+    }
+    document.getElementById('signaturePopup').addEventListener('click', function(e) {
+      if (e.target === this) closeSignaturePopup();
+    });
+    function closeWordlePopup() {
+      playClick();
+      document.getElementById('wordlePopup').classList.remove('show');
+    }
+    document.getElementById('wordlePopup').addEventListener('click', function(e) {
+      if (e.target === this) closeWordlePopup();
+    });
 
-function flip(card){
-  playClick();
-  card.classList.toggle("flip");
-}
+    // ---------- PAGE 3: WORDLE ----------
+    const ANSWER = 'HEART';
+    const grid = document.getElementById('wordleGrid');
+    let row = 0;
+    for (let i = 0; i < 30; i++) {
+      const div = document.createElement('div');
+      div.className = 'tile';
+      grid.appendChild(div);
+    }
 
-/* WORDLE */
+    function revealHint() {
+      playClick();
+      const box = document.getElementById('wordleHintBox');
+      if (box.classList.contains('revealed')) return;
+      box.classList.add('revealed');
+      box.textContent = 'You have my _';
+    }
 
-const answer="HEART";
-const grid=document.getElementById("grid");
-let row=0;
+    function submitGuess() {
+      playClick();
+      const guess = document.getElementById('guessInput').value.toUpperCase();
+      if (guess.length !== 5) return;
+      for (let i = 0; i < 5; i++) {
+        const tile = grid.children[row * 5 + i];
+        tile.textContent = guess[i];
+        if (guess[i] === ANSWER[i]) tile.classList.add('correct');
+        else if (ANSWER.includes(guess[i])) tile.classList.add('present');
+        else tile.classList.add('wrong');
+      }
+      row++;
+      document.getElementById('guessInput').value = '';
+      if (guess === ANSWER) {
+        playWin();
+        setTimeout(() => {
+          document.getElementById('wordlePopup').classList.add('show');
+        }, 400);
+      }
+    }
 
-for(let i=0;i<30;i++){
-  const div=document.createElement("div");
-  div.className="tile";
-  grid.appendChild(div);
-}
+    // ---------- PAGE 4: CONNECTIONS ----------
+    const categoryList = [
+      { name: 'First Moments Together', words: ['Tattoo', 'School', 'Disney', 'Sake'] },
+      { name: 'Incomplete Tasks on Our Japan Itinerary', words: ['Photobooth', 'Tennis', 'Asakusa', 'Gilmore Girls'] },
+      { name: "Atimaay's Stims", words: ['Singing', 'Thank You', 'Laugh', 'Hello'] },
+      { name: 'Pet Names', words: ['Munchkin', 'Baby', 'Darling', 'Honey'] }
+    ];
+    const categories = categoryList.map(c => c.words);
+    let allWords = categoryList.flatMap(c => c.words);
+    for (let i = allWords.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [allWords[i], allWords[j]] = [allWords[j], allWords[i]];
+    }
+    let selected = [];
+    let solved = 0;
+    const connGrid = document.getElementById('connectionsGrid');
+    allWords.forEach(w => {
+      const tile = document.createElement('div');
+      tile.className = 'conn-tile';
+      tile.textContent = w;
+      tile.dataset.word = w;
+      tile.onclick = function() {
+        if (this.classList.contains('correct')) return;
+        playClick();
+        if (selected.includes(this)) {
+          selected = selected.filter(el => el !== this);
+          this.classList.remove('selected');
+        } else if (selected.length < 4) {
+          selected.push(this);
+          this.classList.add('selected');
+        }
+      };
+      connGrid.appendChild(tile);
+    });
 
-function submitGuess(){
-  playClick();
-  const guess=document.getElementById("guessInput").value.toUpperCase();
-  if(guess.length!==5) return;
+    function connDeselect() {
+      playClick();
+      selected.forEach(el => { el.classList.remove('selected'); });
+      selected = [];
+    }
 
-  for(let i=0;i<5;i++){
-    const tile=grid.children[row*5+i];
-    tile.innerText=guess[i];
-    if(guess[i]===answer[i]) tile.classList.add("correct");
-    else if(answer.includes(guess[i])) tile.classList.add("present");
-    else tile.classList.add("wrong");
-  }
-  row++;
-  document.getElementById("guessInput").value="";
-}
+    function closeCategoryPopup() {
+      playClick();
+      document.getElementById('categoryPopup').classList.remove('show');
+    }
+    document.getElementById('categoryPopup').addEventListener('click', function(e) {
+      if (e.target === this) closeCategoryPopup();
+    });
 
-</script>
+    function connSubmit() {
+      playClick();
+      if (selected.length !== 4) return;
+      const words = selected.map(el => el.dataset.word);
+      const matchIndex = categoryList.findIndex(c => words.every(w => c.words.includes(w)));
+      if (matchIndex !== -1) {
+        const categoryName = categoryList[matchIndex].name;
+        selected.forEach(el => { el.classList.add('correct'); el.classList.remove('selected'); });
+        selected = [];
+        solved++;
+        playWin();
+        document.getElementById('categoryPopupText').textContent = categoryName;
+        document.getElementById('categoryPopup').classList.add('show');
+        if (solved === 4) {
+          document.getElementById('connSuccess').style.display = 'block';
+        }
+      } else {
+        selected.forEach(el => el.classList.add('wrong'));
+        setTimeout(() => {
+          selected.forEach(el => el.classList.remove('wrong', 'selected'));
+          selected = [];
+        }, 400);
+      }
+    }
 
+    // ---------- PAGE 4: QUIZ ----------
+    const quizCorrect = [2, 0, 2, 0, 3, -1, 1, 3, 1, 0];
+    function submitQuiz() {
+      playClick();
+      let score = 0;
+      for (let i = 1; i <= 10; i++) {
+        const chosen = document.querySelector('input[name="q' + i + '"]:checked');
+        const val = chosen ? parseInt(chosen.value, 10) : -2;
+        if (quizCorrect[i - 1] === -1) {
+          if (val >= 0) score++;
+        } else if (val === quizCorrect[i - 1]) {
+          score++;
+        }
+      }
+      const el = document.getElementById('quizResult');
+      el.style.display = 'block';
+      el.textContent = 'You got ' + score + ' out of 10 correct! 🤍';
+      if (score === 10) playWin();
+    }
+
+    // ---------- PAGE 5: REASONS ----------
+    const reasons = [
+      'Your cutest smile ever',
+      'The way you stick out your tongue whenever you\'re happy or silly',
+      'Your adorable laugh',
+      'Your perfect face',
+      'Your soft kisses',
+      'Your big big hugs',
+      'Your compassion',
+      'Your kindness',
+      'Your patience',
+      'Your willingness to be better for me',
+      'Your intelligence',
+      'Your drive in things you\'re passionate about',
+      'You\'re so cracked at everything you do',
+      'You always beat me',
+      'You encourage me to be the best person I can be',
+      'Your singing',
+      'Your smile when you look at me',
+      'How you make every day feel special',
+      'The way you remember the little things',
+      'Your warmth',
+      'Your honesty',
+      'Your sense of humor',
+      'How safe I feel with you',
+      'Your ambition',
+      'The way you say my name',
+      'Your thoughtfulness',
+      'How you never give up on us',
+      'The way you hold my hand',
+      'How you listen to me',
+      'Your dedication to us'
+    ];
+    function showReason() {
+      playClick();
+      const display = document.getElementById('reasonDisplay');
+      display.textContent = reasons[Math.floor(Math.random() * reasons.length)];
+    }
+
+    // ---------- PAGE 6: TIMELINE ----------
+    function toggleCaption(el) {
+      playClick();
+      el.closest('.timeline-item').classList.toggle('expanded');
+      el.textContent = el.closest('.timeline-item').classList.contains('expanded') ? 'Click to collapse' : 'Click me';
+    }
+
+    // ---------- PAGE 7: VISION BOARD SLIDESHOW ----------
+    (function initVisionSlideshows() {
+      const items = document.querySelectorAll('.vision-item[data-slide-prefix]');
+      items.forEach(item => {
+        const prefix = item.getAttribute('data-slide-prefix');
+        const count = Math.max(1, parseInt(item.getAttribute('data-slide-count') || '3', 10));
+        const ext = item.getAttribute('data-slide-ext') || 'jpg';
+        const img = item.querySelector('img');
+        if (!img) return;
+        let index = 1;
+        setInterval(function() {
+          index = (index % count) + 1;
+          img.src = 'assets/' + prefix + '_' + index + '.' + ext;
+        }, 2000);
+      });
+    })();
+
+    // ---------- PAGE 7: COUNTDOWNS ----------
+    function updateCountdowns() {
+      const dates = [
+        new Date('2026-03-20'),
+        new Date('2026-09-01'),
+        new Date('2032-01-01')
+      ];
+      const els = [document.getElementById('countdown1'), document.getElementById('countdown2'), document.getElementById('countdown3')];
+      function run() {
+        const now = new Date();
+        dates.forEach((d, i) => {
+          const diff = d - now;
+          if (diff <= 0) {
+            els[i].textContent = 'Today! 🎉';
+            return;
+          }
+          const days = Math.floor(diff / 86400000);
+          els[i].textContent = days + ' days';
+        });
+      }
+      run();
+      setInterval(run, 60000);
+    }
+
+    // ---------- PAGE 8: LETTER ----------
+    const envelopeWrap = document.getElementById('envelopeWrap');
+    const letterPaper = document.getElementById('letterPaper');
+    const letterBackdrop = document.getElementById('letterBackdrop');
+
+    envelopeWrap.addEventListener('click', function(e) {
+      if (this.classList.contains('open')) return;
+      playClick();
+      this.classList.add('open');
+      letterPaper.classList.add('fullscreen');
+      letterBackdrop.classList.add('show');
+      document.body.appendChild(letterPaper);
+    });
+
+    function closeLetter() {
+      playClick();
+      envelopeWrap.classList.remove('open');
+      letterPaper.classList.remove('fullscreen');
+      letterBackdrop.classList.remove('show');
+      envelopeWrap.appendChild(letterPaper);
+    }
+    letterBackdrop.addEventListener('click', closeLetter);
+
+    letterPaper.addEventListener('click', function(e) {
+      e.stopPropagation();
+    });
+  </script>
 </body>
 </html>
