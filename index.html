@@ -1057,13 +1057,13 @@
     const playBtn = document.getElementById('playBtn');
 
     const songs = {
-      2: { src: 'assets/so_easy.mp3', name: 'So Easy To Fall In Love' },
-      3: { src: 'assets/sparks.mp3', name: 'Sparks' },
-      4: { src: 'assets/stand_by_me.mp3', name: 'Stand By Me' },
-      5: { src: 'assets/i_love_you_so.mp3', name: 'I Love You So' },
-      6: { src: 'assets/every_breath_you_take.mp3', name: 'Every Breath You Take' },
-      7: { src: 'assets/we_belong_together.mp3', name: 'We Belong Together' },
-      8: { src: 'assets/until_i_found_you.mp3', name: 'Until I Found You' }
+      2: { src: 'so_easy.mp3', name: 'So Easy To Fall In Love' },
+      3: { src: 'sparks.mp3', name: 'Sparks' },
+      4: { src: 'stand_by_me.mp3', name: 'Stand By Me' },
+      5: { src: 'i_love_you_so.mp3', name: 'I Love You So' },
+      6: { src: 'every_breath_you_take.mp3', name: 'Every Breath You Take' },
+      7: { src: 'we_belong_together.mp3', name: 'We Belong Together' },
+      8: { src: 'until_i_found_you.mp3', name: 'Until I Found You' }
     };
 
     const prevBtn = document.getElementById('prevBtn');
@@ -1384,7 +1384,7 @@
         let index = 1;
         setInterval(function() {
           index = (index % count) + 1;
-          img.src = 'assets/' + prefix + '_' + index + '.' + ext;
+          img.src = '' + prefix + '_' + index + '.' + ext;
         }, 2000);
       });
     })();
